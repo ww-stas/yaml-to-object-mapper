@@ -1,0 +1,12 @@
+list:
+  - first
+  - second
+  - third
+integerValue: 3
+booleanValue: true
+model:
+  name: nestedModel
+  values:
+    - first
+    - second
+    - third
