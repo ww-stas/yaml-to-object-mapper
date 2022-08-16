@@ -3,11 +3,13 @@
 namespace Test\CustomVar\Now;
 
 use Diezz\YamlToObjectMapper\Attributes\Required;
+use Diezz\YamlToObjectMapper\Attributes\ResolverType;
 use Diezz\YamlToObjectMapper\YamlConfigurable;
 
 class Test01TargetClass implements YamlConfigurable
 {
     #[Required]
+    #[ResolverType(ResolverType::EAGER)]
     private string $value;
 
     /**

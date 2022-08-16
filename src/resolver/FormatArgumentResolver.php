@@ -16,4 +16,9 @@ class FormatArgumentResolver extends ArgumentResolver
 
         return $context->format($this->method);
     }
+
+    public function getName(): string
+    {
+        return 'format';
+    }
 }

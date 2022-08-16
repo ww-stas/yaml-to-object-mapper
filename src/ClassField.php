@@ -3,6 +3,7 @@
 namespace Diezz\YamlToObjectMapper;
 
 use Diezz\YamlToObjectMapper\Attributes\Constructor;
+use Diezz\YamlToObjectMapper\Attributes\ResolverType;
 use Diezz\YamlToObjectMapper\Resolver\ArgumentResolver;
 
 class ClassField
@@ -17,6 +18,23 @@ class ClassField
     private string $constructor = Constructor::DEFAULT_EMPTY;
     private bool $hasDefaultValue = false;
     private ?string $defaultValueResolver = null;
+    private int $argumentResolverType = ResolverType::EAGER;
+
+    /**
+     * @return int
+     */
+    public function getArgumentResolverType(): int
+    {
+        return $this->argumentResolverType;
+    }
+
+    /**
+     * @param int $argumentResolverType
+     */
+    public function setArgumentResolverType(int $argumentResolverType): void
+    {
+        $this->argumentResolverType = $argumentResolverType;
+    }
 
     /**
      * @return string
@@ -97,11 +115,6 @@ class ClassField
     public function isPrimitive(): bool
     {
         return null === $this->classInfo;
-    }
-
-    public function isArgumentResolver(): bool
-    {
-        return $this->type === ArgumentResolver::class;
     }
 
     /**

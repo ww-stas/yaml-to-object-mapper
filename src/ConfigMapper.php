@@ -25,6 +25,7 @@ class ConfigMapper
     #[Pure] public static function make(): static
     {
         $argumentResolverFactory = new ArgumentResolverFactory();
+
         return new static($argumentResolverFactory);
     }
 
@@ -33,11 +34,11 @@ class ConfigMapper
      *
      * @param class-string<T> $targetClass
      *
-     * @todo get rid of Reflection exception
      * @throws ReflectionException
      * @throws ValidationException
      * @return T
      *
+     * @todo     get rid of Reflection exception
      */
     public function mapFromFile(string $targetClass, string $configFile): YamlConfigurable
     {
@@ -52,15 +53,15 @@ class ConfigMapper
      * @param class-string<T> $targetClass
      *
      * @throws ValidationException
-     * @throws ReflectionException
+     * @throws ReflectionException|Resolver\ArgumentResolverException
      *
      * @return T
      */
     public function map(string $targetClass, array $config): YamlConfigurable
     {
         $instance = new $targetClass;
-        $classInfo = ClassInfo::make($targetClass);
-        $classInfo->fixCircularReferences();
+        $classInfoReflector = new ClassInfoReflector();
+        $classInfo = $classInfoReflector->introspect($targetClass);
         $validationResult = $this->validate($classInfo, $config);
 
         if (!$validationResult->isValid()) {
@@ -76,7 +77,7 @@ class ConfigMapper
      * @param class-string<T> $targetClass
      *
      * @throws ValidationException
-     * @throws ReflectionException
+     * @throws ReflectionException|Resolver\ArgumentResolverException
      *
      * @return T
      */
@@ -114,22 +115,18 @@ class ConfigMapper
                 $rawValue = $config[$fieldName];
             }
 
-            if (!$field->isPrimitive() || $field->isArgumentResolver()) {
+            if (!$field->isPrimitive()) {
                 $targetClassName = $field->getType();
                 if (!$field->isList()) {
                     $value = $this->doMap($field->getClassInfo(), $rawValue, $field->newInstance());
                 } else {
                     $value = [];
                     foreach ($rawValue as $key => $item) {
-                        if ($field->isArgumentResolver()) {
-                            $value[$key] = $this->argumentResolverFactory->create($item);
-                        } else {
-                            $value[] = $this->doMap($field->getClassInfo(), $item, new $targetClassName, $key);
-                        }
+                        $value[] = $this->doMap($field->getClassInfo(), $item, new $targetClassName, $key);
                     }
                 }
             } else {
-                $value = $rawValue;
+                $value = $this->argumentResolverFactory->create($rawValue);
             }
 
             $this->setValue($field, $value, $resultInstance);
@@ -138,11 +135,15 @@ class ConfigMapper
         return $resultInstance;
     }
 
-    private function setValue(ClassField $field, $value, $resultInstance): void
+
+    private function setValue(ClassField $field, ArgumentResolver $argumentResolver, $resultInstance): void
     {
+        $value = $argumentResolver->resolve();
+
         if ($value === null && $field->hasDefaultValue()) {
             return;
         }
+
         if ($field->isPublic()) {
             $resultInstance->{$field->getName()} = $value;
         } else {

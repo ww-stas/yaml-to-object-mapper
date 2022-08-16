@@ -121,4 +121,11 @@ abstract class ArgumentResolver
     }
 
     abstract protected function doResolve($context = null);
+
+    /**
+     * The name of the resolver.
+     *
+     * @return string
+     */
+    abstract public function getName(): string;
 }

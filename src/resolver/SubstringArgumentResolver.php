@@ -8,4 +8,9 @@ class SubstringArgumentResolver extends ArgumentResolver
     {
         return substr($context, (int)$this->method);
     }
+
+    public function getName(): string
+    {
+        return 'substring';
+    }
 }

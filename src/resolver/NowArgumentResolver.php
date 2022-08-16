@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Diezz\YamlToObjectMapper\Resolver\Variables;
+namespace Diezz\YamlToObjectMapper\Resolver;
 
 use DateTime;
 
@@ -11,7 +11,7 @@ use DateTime;
  * Example of usage:
  * $now::Y-m-d H:i:s
  */
-class NowCustomVar extends CustomVariable
+class NowArgumentResolver extends ArgumentResolver
 {
     public function getName(): string
     {
@@ -20,6 +20,6 @@ class NowCustomVar extends CustomVariable
 
     protected function doResolve($context = null): string
     {
-        return (new DateTime())->format($this->argument);
+        return (new DateTime())->format($this->method);
     }
 }

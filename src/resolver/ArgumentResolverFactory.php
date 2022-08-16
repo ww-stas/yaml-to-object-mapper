@@ -2,6 +2,7 @@
 
 namespace Diezz\YamlToObjectMapper\Resolver;
 
+use RuntimeException;
 use phpDocumentor\Reflection\Types\ClassString;
 
 class ArgumentResolverFactory
@@ -10,11 +11,19 @@ class ArgumentResolverFactory
 
     private ?string $resolversNamespace = null;
 
-    private array $registeredResolvers = [];
+    private array $registeredResolvers = [
+        'format'    => FormatArgumentResolver::class,
+        'substring' => SubstringArgumentResolver::class,
+        'now'       => NowArgumentResolver::class,
+    ];
 
     public function addResolver(ClassString $resolver): void
     {
-        $this->registeredResolvers[] = $resolver;
+        $instance = new $resolver;
+        if (!$instance instanceof ArgumentResolver) {
+            throw new RuntimeException('Resolver must be an instance of ArgumentResolver class');
+        }
+        $this->registeredResolvers[$instance->getName()] = $resolver;
     }
 
     /**
@@ -76,19 +85,21 @@ class ArgumentResolverFactory
      *
      * @return ClassString
      */
-    private function findArgumentResolverClassName(string $argumentResolverName): string {
-        foreach ($this->registeredResolvers as $resolverCandidate) {
-            $argumentResolverClassName = $resolverCandidate . ucfirst($argumentResolverName) . "ArgumentResolver";
-            if (!class_exists($argumentResolverClassName)) {
-                continue;
-            }
-            if (!is_subclass_of($argumentResolverClassName, ArgumentResolver::class)) {
-                throw new ArgumentResolverException("The argument resolver $argumentResolverClassName must extends ArgumentResolver abstract class");
-            }
-
-            return $argumentResolverName;
+    private function findArgumentResolverClassName(string $argumentResolverName): string
+    {
+        if (!array_key_exists($argumentResolverName, $this->registeredResolvers)) {
+            throw new ArgumentResolverException("Couldn't find suitable argument resolver for name $argumentResolverName");
         }
 
-        throw new ArgumentResolverException("Couldn't find suitable argument resolver for name $argumentResolverName");
+        $argumentResolverClassName = $this->registeredResolvers[$argumentResolverName];
+
+        if (!class_exists($argumentResolverClassName)) {
+            throw new ArgumentResolverException("Unable to find class $argumentResolverName");
+        }
+        if (!is_subclass_of($argumentResolverClassName, ArgumentResolver::class)) {
+            throw new ArgumentResolverException("The argument resolver $argumentResolverClassName must extends ArgumentResolver abstract class");
+        }
+
+        return $argumentResolverClassName;
     }
 }

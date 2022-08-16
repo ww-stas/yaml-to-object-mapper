@@ -24,4 +24,9 @@ class ScalarArgumentResolver extends ArgumentResolver
 
         return $this->method;
     }
+
+    public function getName(): string
+    {
+        return 'scalar';
+    }
 }
