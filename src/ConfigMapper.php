@@ -36,6 +36,7 @@ class ConfigMapper
      *
      * @throws ReflectionException
      * @throws ValidationException
+     * @throws Resolver\ArgumentResolverException
      * @return T
      *
      * @todo     get rid of Reflection exception
@@ -136,9 +137,11 @@ class ConfigMapper
     }
 
 
-    private function setValue(ClassField $field, ArgumentResolver $argumentResolver, $resultInstance): void
+    private function setValue(ClassField $field, $value, $resultInstance): void
     {
-        $value = $argumentResolver->resolve();
+        if ($value instanceof ArgumentResolver) {
+            $value = $value->resolve();
+        }
 
         if ($value === null && $field->hasDefaultValue()) {
             return;

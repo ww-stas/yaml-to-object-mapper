@@ -1,0 +1,7 @@
+name: test mapping of lists
+persons:
+  - name: John Smith
+    age: 27
+
+  - name: Sarah Connor
+    age: 35

@@ -54,7 +54,7 @@ class ModelMapperTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->mapper = new ConfigMapper();
+        $this->mapper = ConfigMapper::make();
         parent::setUp();
     }
 }

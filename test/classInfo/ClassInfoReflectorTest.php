@@ -7,6 +7,8 @@ use Diezz\YamlToObjectMapper\ClassInfoReflector;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
 use Test\CustomVar\Now\Test01TargetClass;
+use Test\Examples\ListModel02;
+use Test\Examples\Person;
 
 class ClassInfoReflectorTest extends TestCase
 {
@@ -46,5 +48,21 @@ class ClassInfoReflectorTest extends TestCase
         self::assertTrue($value->isPrimitive());
         self::assertFalse($value->isList());
         self::assertEquals(ResolverType::EAGER, $value->getArgumentResolverType());
+    }
+
+    public function testReflectionOfTypedCollection(): void
+    {
+        //Given
+        $targetClass = ListModel02::class;
+
+        //When
+        $result = $this->reflector->introspect($targetClass);
+
+        //Then
+        self::assertArrayHasKey('persons', $result->getFields());
+        $personField = $result->getFields()['persons'];
+        self::assertTrue($personField->isList());
+        self::assertEquals(Person::class, $personField->getType());
+        self::assertNotNull($personField->getClassInfo());
     }
 }

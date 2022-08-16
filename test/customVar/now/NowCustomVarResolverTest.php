@@ -22,7 +22,7 @@ class NowCustomVarResolverTest extends TestCase
         $expectedResult = (new \DateTime())->format('Y-m-d');
 
         //When
-        $result = $mapper->mapFromFile(Test01TargetClass::class,$file);
+        $result = $mapper->mapFromFile(Test01TargetClass::class, $file);
 
         //Then
         self::assertEquals($expectedResult, $result->getValue());

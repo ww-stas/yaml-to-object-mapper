@@ -18,9 +18,9 @@ class ScalarArgumentResolver extends ArgumentResolver
     {
         $result = $this->method;
 
-        if ($this->type === 'string') {
-            return (string)$result;
-        }
+//        if ($this->type === 'string') {
+//            return (string)$result;
+//        }
 
         return $this->method;
     }

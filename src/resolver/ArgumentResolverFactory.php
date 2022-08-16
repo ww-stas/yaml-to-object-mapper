@@ -31,7 +31,7 @@ class ArgumentResolverFactory
      */
     public function create(mixed $value): ArgumentResolver
     {
-        if (is_bool($value) || is_int($value)) {
+        if (is_bool($value) || is_int($value) || is_array($value)) {
             return new ScalarArgumentResolver($value);
         }
 

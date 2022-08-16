@@ -1,0 +1,5 @@
+name: test mapping of lists
+list:
+  one: one
+  two: two
+  three: three
