@@ -2,8 +2,8 @@
 
 namespace Diezz\YamlToObjectMapper\Resolver;
 
-use RuntimeException;
 use phpDocumentor\Reflection\Types\ClassString;
+use RuntimeException;
 
 class ArgumentResolverFactory
 {
@@ -15,6 +15,7 @@ class ArgumentResolverFactory
         'format'    => FormatArgumentResolver::class,
         'substring' => SubstringArgumentResolver::class,
         'now'       => NowArgumentResolver::class,
+        'self'      => SelfArgumentResolver::class,
     ];
 
     public function addResolver(ClassString $resolver): void

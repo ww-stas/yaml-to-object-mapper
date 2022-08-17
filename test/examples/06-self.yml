@@ -1,0 +1,3 @@
+name: Testing of $self on field that should be resolved as well
+target: $self::date
+date: $now::Y-m-d

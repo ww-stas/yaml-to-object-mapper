@@ -5,6 +5,7 @@ namespace Diezz\YamlToObjectMapper;
 use Diezz\YamlToObjectMapper\Attributes\DefaultValueResolver;
 use Diezz\YamlToObjectMapper\Resolver\ArgumentResolver;
 use Diezz\YamlToObjectMapper\Resolver\ArgumentResolverFactory;
+use Diezz\YamlToObjectMapper\Resolver\Context;
 use JetBrains\PhpStorm\Pure;
 use ReflectionException;
 use Symfony\Component\Yaml\Yaml;
@@ -12,6 +13,7 @@ use Symfony\Component\Yaml\Yaml;
 class ConfigMapper
 {
     private ArgumentResolverFactory $argumentResolverFactory;
+    private Context $context;
 
     /**
      * @param ArgumentResolverFactory $argumentResolverFactory
@@ -69,6 +71,7 @@ class ConfigMapper
             throw new ValidationException($validationResult);
         }
 
+        $this->context = new Context($config, $classInfo);
         return $this->doMap($classInfo, $config, $instance);
     }
 
@@ -140,7 +143,7 @@ class ConfigMapper
     private function setValue(ClassField $field, $value, $resultInstance): void
     {
         if ($value instanceof ArgumentResolver) {
-            $value = $value->resolve();
+            $value = $value->resolve($this->context);
         }
 
         if ($value === null && $field->hasDefaultValue()) {

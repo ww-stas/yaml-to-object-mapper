@@ -1,0 +1,9 @@
+name: Testing of $self argument resolver
+persons:
+  - name: John Smith
+    age: 27
+
+  - name: Sarah Connor
+    age: 35
+
+target: $self::persons.1.name

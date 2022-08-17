@@ -4,7 +4,7 @@ namespace Test;
 
 use Diezz\YamlToObjectMapper\ConfigMapper;
 use PHPUnit\Framework\TestCase;
-use Test\Examples\ListModel;
+use Test\Examples\ListModel01;
 use Test\Examples\ListModel02;
 
 class ListMappingTest extends TestCase
@@ -20,7 +20,7 @@ class ListMappingTest extends TestCase
         $file = __DIR__ . '/examples/01-list.yml';
 
         //When
-        $result = ConfigMapper::make()->mapFromFile(ListModel::class, $file);
+        $result = ConfigMapper::make()->mapFromFile(ListModel01::class, $file);
 
         //Then
         self::assertEquals('test mapping of lists', $result->name);
