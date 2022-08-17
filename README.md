@@ -17,7 +17,7 @@ connection:
   username: test
   password: password
 ```
-which we want map to the object of class:
+which we want to be mapped to the object of class:
 
 ```php
 use Diezz\YamlToObjectMapper\YamlConfigurable;
@@ -44,7 +44,17 @@ $config = ConfigMapper::make()->mapFromFile(Config::class, 'config.yml');
 ## Extended usage
 
 ### Usage of environment variables in a yml file
-
+You can use environment variables in your yml file like this
+```yaml
+name: Test env variables
+connection:
+  host: localhost
+  port: 3202
+  username: $env::DB_USER
+  password: $env::DB_PASSWORD
+```
+**Note:** if env variable can't be resolved the argument resolver will return `null`. 
+In that case make sure you class field allowed null values or either exception would be thrown
 ### Validation
 
 ### Variables processing

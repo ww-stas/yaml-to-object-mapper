@@ -1,0 +1,10 @@
+<phpunit bootstrap="vendor/autoload.php">
+    <testsuites>
+        <testsuite name="yaml-to-object-mapper">
+            <directory>test</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <env name="TEST_VALUE" value="some_value" force="true" />
+    </php>
+</phpunit>

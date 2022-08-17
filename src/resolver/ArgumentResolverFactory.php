@@ -16,6 +16,7 @@ class ArgumentResolverFactory
         'substring' => SubstringArgumentResolver::class,
         'now'       => NowArgumentResolver::class,
         'self'      => SelfArgumentResolver::class,
+        'env'       => EnvironmentArgumentResolver::class,
     ];
 
     public function addResolver(ClassString $resolver): void
