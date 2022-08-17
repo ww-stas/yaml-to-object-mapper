@@ -1,0 +1,13 @@
+name: test default value resolver (PARENT_KEY and NESTED_LIST)
+tables:
+  - name: users
+    columns:
+      username: varchar(255)
+      email: varchar(255)
+      password: varchar(255)
+
+  - name: orders
+    columns:
+      id: int
+      user_id: int
+      price: float

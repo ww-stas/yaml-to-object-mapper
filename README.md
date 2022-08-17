@@ -74,7 +74,7 @@ tables:
 use Diezz\YamlToObjectMapper\Attributes\Collection;
 
 class DatabaseSchema {
-    #[Collection(class: Table)]
+    #[Collection(class: Table::class)]
     public array $tables;
 }
 

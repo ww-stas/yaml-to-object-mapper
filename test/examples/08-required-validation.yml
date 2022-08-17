@@ -1,0 +1,2 @@
+name: Testing of required validator
+#target: this field is required but isn't presented in the config file
