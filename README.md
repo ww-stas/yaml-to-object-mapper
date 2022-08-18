@@ -1,13 +1,11 @@
 # Yaml to Object Mapper
 
-The mapper allows you to easily map yaml to PHP objects with 
-validation and custom variables processing
-
+The mapper allows you to easily map yaml to PHP objects with validation and custom variables processing.
 This mapper works with php 8 attributes which uses for describing mapping or/and validation rules for exact fields 
 
 ## Installation
 
-## Simple usage
+## Basic usage
 We have a simple `config.yml` file 
 ```yaml
 name: object mapper
@@ -56,8 +54,65 @@ connection:
 **Note:** if env variable can't be resolved the argument resolver will return `null`. 
 In that case make sure you class field allowed null values or either exception would be thrown
 ### Validation
+By default, the mapper checks that required fields are present in yml file.
+There are multiple ways how the mapper defines which field is required:
+1. The most obvious way is mark required field with `#[Required]` attribute.
+2. If class field isn't marked with required attribute the mapper checks type hint of the field. It could be a php 7 
+type hint or phpdoc comment. Nullable properties or properties initiated with default value are treated as not required 
+or vice verse. 
+
+```php
+use Diezz\YamlToObjectMapper\Attributes\Required;
+use Diezz\YamlToObjectMapper\YamlConfigurable;
+
+class Model implements YamlConfigurable {
+    /**
+     * Required field 
+     */
+    #[Required]
+    public $value0;
+    
+    /**
+     * This field is required
+     */
+    public string $value1;
+
+    /**
+     * This field required as well based on type hint in the doc comment
+     *
+     * @var string
+     */
+    public $value2;
+
+    /**
+     * Field isn't required because it has default value
+     */
+    public string $value3 = 'value3';
+
+    /**
+     * Nullable field isn't required
+     */
+    public ?string $value4;
+
+    /**
+     * Nullable field isn't required
+     *
+     * @var string|null
+     */
+    public $value5;
+}
+```
 
 ### Variables processing
+
+The mapper supports processing of variables which will be resolved during runtime.
+Basic syntax for variables is `$varName::firstArgument::secondArgument`
+Built-in variables:
+- format
+- substring 
+- now
+- self
+- env
 
 ### Argument resolvers
 
@@ -94,7 +149,7 @@ class Table {
 }
 ```
 
-instead of write `name` property every time and `columns` we may use this approach to avoid duplicates
+instead of writing `name` property every time and `columns` we may use this approach to avoid duplicates
 ```yaml
 tables:
   users:

@@ -9,6 +9,7 @@ use ReflectionException;
 use Test\CustomVar\Now\Test01TargetClass;
 use Test\Examples\ListModel02;
 use Test\Examples\Person;
+use Test\Examples\RequiredModel;
 
 class ClassInfoReflectorTest extends TestCase
 {
@@ -64,5 +65,22 @@ class ClassInfoReflectorTest extends TestCase
         self::assertTrue($personField->isList());
         self::assertEquals(Person::class, $personField->getType());
         self::assertNotNull($personField->getClassInfo());
+    }
+
+    public function testRequiredFields(): void
+    {
+        //Given
+        $targetClass = RequiredModel::class;
+
+        //When
+        $result = $this->reflector->introspect($targetClass);
+
+        //Then
+        self::assertTrue($result->getFields()['value0']->isRequired());
+        self::assertTrue($result->getFields()['value1']->isRequired());
+        self::assertTrue($result->getFields()['value2']->isRequired());
+        self::assertFalse($result->getFields()['value3']->isRequired());
+        self::assertFalse($result->getFields()['value4']->isRequired());
+        self::assertFalse($result->getFields()['value5']->isRequired());
     }
 }
