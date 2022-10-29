@@ -1,2 +1,2 @@
 name: Testing of $self argument resolver
-target: $self::name
+target: ${self:name}

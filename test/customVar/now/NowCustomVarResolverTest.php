@@ -25,6 +25,6 @@ class NowCustomVarResolverTest extends TestCase
         $result = $mapper->mapFromFile(Test01TargetClass::class, $file);
 
         //Then
-        self::assertEquals($expectedResult, $result->getValue());
+        self::assertEquals($expectedResult, $result->getValue()->format('Y-m-d'));
     }
 }

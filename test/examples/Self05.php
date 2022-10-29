@@ -10,5 +10,5 @@ class Self05 implements YamlConfigurable
 
     public string $target;
 
-    public string $date;
+    public \DateTime $date;
 }

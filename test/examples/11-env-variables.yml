@@ -1,2 +1,2 @@
 name: Test env variables
-target: $env::TEST_VALUE
+target: ${env:TEST_VALUE}

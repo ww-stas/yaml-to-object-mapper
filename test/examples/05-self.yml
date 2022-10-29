@@ -6,4 +6,4 @@ persons:
   - name: Sarah Connor
     age: 35
 
-target: $self::persons.3.name
+target: ${self:persons.3.name}

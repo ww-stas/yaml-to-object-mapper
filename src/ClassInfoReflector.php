@@ -111,6 +111,11 @@ class ClassInfoReflector
     private function resolveType(ReflectionProperty $reflectionProperty, ClassField $classField): void
     {
         $type = $reflectionProperty->getType();
+        if (null === $type) {
+            $classField->setType('mixed');
+
+            return;
+        }
         $typeName = $type->getName();
         $isNested = false;
         $isList = false;
@@ -165,11 +170,12 @@ class ClassInfoReflector
             return true;
         }
 
-        if ($reflectionProperty->hasDefaultValue()) {
+        $propertyType = $reflectionProperty->getType();
+        //if property hasn't type hint by default it's equal to null
+        if (null !== $propertyType && $reflectionProperty->hasDefaultValue()) {
             return false;
         }
 
-        $propertyType = $reflectionProperty->getType();
         if (null !== $propertyType) {
             return !$propertyType->allowsNull();
         }
@@ -182,7 +188,7 @@ class ClassInfoReflector
         if (preg_match('/@var\s+(\S+)/', $doc, $matches)) {
             [, $type] = $matches;
 
-            return str_contains($type, 'null|') or str_contains($type, '|null');
+            return !(str_contains($type, 'null|') or str_contains($type, '|null'));
         }
 
         return false;
