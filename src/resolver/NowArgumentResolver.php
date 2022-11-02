@@ -18,8 +18,13 @@ class NowArgumentResolver extends ArgumentResolver
         return 'now';
     }
 
-    protected function doResolve($context = null): DateTime
+    protected function doResolve($context = null): mixed
     {
-        return new DateTime();
+        $now = new DateTime();
+        if ($this->method !== null) {
+            return $now->format($this->method);
+        }
+
+        return $now;
     }
 }

@@ -23,11 +23,6 @@ class Token
         return $this->value;
     }
 
-    public function concatenateValue(string $value): void
-    {
-        $this->value .= $value;
-    }
-
     public static function of(?int $tokenType, string $value): static
     {
         return new Token($tokenType, $value);

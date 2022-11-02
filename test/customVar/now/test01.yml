@@ -1,1 +1,1 @@
-value: $now::Y-m-d
+value: ${now:'Y-m-d'}

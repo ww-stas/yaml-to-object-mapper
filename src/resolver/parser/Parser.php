@@ -2,13 +2,23 @@
 
 namespace Diezz\YamlToObjectMapper\Resolver\Parser;
 
+use Diezz\YamlToObjectMapper\Resolver\Parser\AST\ArrayExpression;
+use Diezz\YamlToObjectMapper\Resolver\Parser\AST\ASTNode;
+use Diezz\YamlToObjectMapper\Resolver\Parser\AST\Expression;
+use Diezz\YamlToObjectMapper\Resolver\Parser\AST\PathArgument;
+use Diezz\YamlToObjectMapper\Resolver\Parser\AST\ResolverExpression;
+use Diezz\YamlToObjectMapper\Resolver\Parser\AST\StringLiteral;
 use JetBrains\PhpStorm\ArrayShape;
+
 
 class Parser
 {
     private Tokenizer $tokenizer;
     private ?Token $lookahead;
     private ?Token $current = null;
+    private ?string $context = null;
+
+    private const CONTEXT_ARGUMENT_RESOLVER = 'argumentResolver';
 
     public function __construct(string $string)
     {
@@ -18,8 +28,7 @@ class Parser
     /**
      * @throws SyntaxException
      */
-    #[ArrayShape(['type' => "string", 'body' => "array"])]
-    public function parse(): array
+    public function parse(): ASTNode
     {
         $this->lookahead = $this->tokenizer->getNextToken();
 
@@ -29,17 +38,20 @@ class Parser
     /**
      * @throws SyntaxException
      */
-    #[ArrayShape(['type' => "string", 'body' => "array"])]
-    private function expression(): array
+    private function expression(): Expression
     {
-        return [
-            'type' => 'Expression',
-            'body' => $this->statementList(),
-        ];
+        if ($this->tokenizer->isScalar()) {
+            $node = [new StringLiteral($this->tokenizer->getString())];
+        } else {
+            $node = $this->statementList();
+        }
+
+        return new Expression($node);
     }
 
     /**
      * @throws SyntaxException
+     * @return ASTNode[]
      */
     private function statementList(?int $stopLookahead = null): array
     {
@@ -55,33 +67,50 @@ class Parser
     /**
      * @throws SyntaxException
      */
-    private function statement(): array
+    private function statement(): ASTNode
     {
-        switch ($this->lookahead->getTokenType()) {
-            case Tokenizer::T_STRING_LITERAL :
-                return $this->stringLiteral();
-            case Tokenizer::T_QUOTED_STRING_LITERAL:
-                return $this->quotedStringLiteral();
-            case Tokenizer::T_BEGIN_OF_EXPRESSION:
-                return $this->resolverExpression();
-            case Tokenizer::T_SEMICOLON:
-                return $this->asStringLiteral(Tokenizer::T_SEMICOLON);
-            case Tokenizer::T_DASH:
-                return $this->asStringLiteral(Tokenizer::T_DASH);
-            case Tokenizer::T_UNDERSCORE:
-                return $this->asStringLiteral(Tokenizer::T_UNDERSCORE);
-            case Tokenizer::T_ARRAY_BEGIN:
-                return $this->arrayExpression();
-            default:
-                throw new SyntaxException("Unexpected literal: {$this->lookahead->getValue()}");
+        if ($this->context === self::CONTEXT_ARGUMENT_RESOLVER) {
+            return $this->resolverContext();
         }
+
+        return $this->stringContext();
     }
 
     /**
      * @throws SyntaxException
      */
-    #[ArrayShape(['type' => "string", 'values' => "array"])]
-    public function arrayExpression(): array
+    private function resolverContext(): ASTNode
+    {
+        //In scope of resolver we skip all space symbols, in other cases treat them as StringLiteral
+        while ($this->lookahead->getTokenType() === Tokenizer::T_SPACE) {
+            $this->eat(Tokenizer::T_SPACE);
+        }
+
+        return match ($this->lookahead->getTokenType()) {
+            Tokenizer::T_ARRAY_BEGIN => $this->arrayExpression(),
+            Tokenizer::T_STRING_LITERAL => $this->argument(),
+            Tokenizer::T_BEGIN_OF_EXPRESSION => $this->resolverExpression(),
+            Tokenizer::T_QUOTED_STRING_LITERAL => $this->quotedStringLiteral(),
+            default => throw new SyntaxException("Unexpected literal: {$this->lookahead->getValue()}"),
+        };
+    }
+
+    /**
+     * @throws SyntaxException
+     */
+    private function stringContext(): ASTNode
+    {
+        if ($this->lookahead->getTokenType() === Tokenizer::T_BEGIN_OF_EXPRESSION) {
+            return $this->resolverExpression();
+        }
+
+        return $this->asStringLiteral($this->lookahead->getTokenType());
+    }
+
+    /**
+     * @throws SyntaxException
+     */
+    private function arrayExpression(): ArrayExpression
     {
         $this->eat(Tokenizer::T_ARRAY_BEGIN);
 
@@ -96,51 +125,36 @@ class Parser
 
         $this->eat(Tokenizer::T_ARRAY_END);
 
-        return [
-            'type'   => 'ArrayExpression',
-            'values' => $list,
-        ];
+        return new ArrayExpression($list);
     }
 
     /**
      * @throws SyntaxException
      */
-    #[ArrayShape(['type' => "string", 'value' => "string"])]
-    private function asStringLiteral(int $tokenType): array
+    private function asStringLiteral(int $tokenType): StringLiteral
     {
-        //if ($this->current->getTokenType() === Tokenizer::T_STRING_LITERAL || $this->current->getTokenType() === Tokenizer::T_QUOTED_STRING_LITERAL) {
-        $token = $this->eat($tokenType);
-
-        return [
-            'type'  => 'StringLiteral',
-            'value' => $token->getValue(),
-        ];
-        //}
-
-        //throw new SyntaxException("Unexpected literal: {$this->lookahead->getValue()}");
+        return new StringLiteral($this->eat($tokenType)->getValue());
     }
 
     /**
      * @throws SyntaxException
      */
-    #[ArrayShape(['type' => "string", 'provider' => "string", 'arguments' => "array[]"])]
-    private function resolverExpression(): array
+    private function resolverExpression(): ResolverExpression
     {
+        $this->context = self::CONTEXT_ARGUMENT_RESOLVER;
         $this->eat(Tokenizer::T_BEGIN_OF_EXPRESSION);
         $provider = $this->eat(Tokenizer::T_STRING_LITERAL);
         $this->eat(Tokenizer::T_SEMICOLON);
         $arguments = $this->argumentList();
         $this->eat(Tokenizer::T_END_OF_EXPRESSION);
+        $this->context = null;
 
-        return [
-            'type'      => 'ResolverExpression',
-            'provider'  => $provider->getValue(),
-            'arguments' => $arguments,
-        ];
+        return new ResolverExpression($provider->getValue(), $arguments);
     }
 
     /**
      * @throws SyntaxException
+     * @return ASTNode[]
      */
     private function argumentList(): array
     {
@@ -159,29 +173,51 @@ class Parser
     /**
      * @throws SyntaxException
      */
-    #[ArrayShape(['type' => "string", 'value' => "string"])]
-    private function stringLiteral(): array
+    private function argument(): ASTNode
     {
         $token = $this->eat(Tokenizer::T_STRING_LITERAL);
+        if ($this->lookahead->getTokenType() === Tokenizer::T_DOT) {
+            return $this->pathArgument($token);
+        }
 
-        return [
-            'type'  => 'StringLiteral',
-            'value' => $token->getValue(),
-        ];
+        return new StringLiteral($token->getValue());
+    }
+
+    /**
+     * @throws SyntaxException
+     */
+    private function pathArgument(Token $token): PathArgument
+    {
+        $pathArgument = new PathArgument();
+        $pathArgument->addPathItem($token->getValue());
+
+        $stop = [Tokenizer::T_ARRAY_END, Tokenizer::T_END_OF_EXPRESSION, Tokenizer::T_COMMA];
+        do {
+            $this->eat(Tokenizer::T_DOT);
+            $token = $this->eat(Tokenizer::T_STRING_LITERAL);
+            $pathArgument->addPathItem($token->getValue());
+        } while (!in_array($this->lookahead->getTokenType(), $stop, true));
+
+        return $pathArgument;
+    }
+
+    /**
+     * @throws SyntaxException
+     */
+    private function stringLiteral(): StringLiteral
+    {
+        return new StringLiteral($this->eat(Tokenizer::T_STRING_LITERAL)->getValue());
     }
 
     /**
      * @throws SyntaxException
      */
     #[ArrayShape(['type' => "string", 'value' => "string"])]
-    private function quotedStringLiteral(): array
+    private function quotedStringLiteral(): StringLiteral
     {
         $token = $this->eat(Tokenizer::T_QUOTED_STRING_LITERAL);
 
-        return [
-            'type'  => 'StringLiteral',
-            'value' => substr($token->getValue(), 1, -1),
-        ];
+        return new StringLiteral(substr($token->getValue(), 1, -1));
     }
 
     /**

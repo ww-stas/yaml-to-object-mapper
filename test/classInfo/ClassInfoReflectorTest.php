@@ -40,7 +40,7 @@ class ClassInfoReflectorTest extends TestCase
         $value = $fields['value'];
 
         self::assertEquals('value', $value->getName());
-        self::assertEquals('DateTime', $value->getType());
+        self::assertEquals('string', $value->getType());
         self::assertNull($value->getClassInfo());
         self::assertNull($value->getDefaultValueResolver());
         self::assertEquals('setValue', $value->getSetter());

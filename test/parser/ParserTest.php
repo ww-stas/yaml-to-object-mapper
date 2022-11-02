@@ -8,27 +8,22 @@ use PHPUnit\Framework\TestCase;
 
 class ParserTest extends TestCase
 {
-
     /**
      * @throws SyntaxException
      */
-    public function testStringWithSpaceShouldBeEvaluatedAsTwoStringLiterals(): void
+    public function testStringWithSpaceShouldBeEvaluatedAsOneStringLiterals(): void
     {
         $string = 'some string';
         $parser = new Parser($string);
 
-        $result = $parser->parse();
+        $result = $parser->parse()->toArray();
 
         $this->assertEquals([
             'type' => 'Expression',
             'body' => [
                 [
                     'type'  => 'StringLiteral',
-                    'value' => 'some',
-                ],
-                [
-                    'type'  => 'StringLiteral',
-                    'value' => 'string',
+                    'value' => 'some string',
                 ],
             ],
         ], $result);
@@ -42,14 +37,14 @@ class ParserTest extends TestCase
         $string = "'some string'";
         $parser = new Parser($string);
 
-        $result = $parser->parse();
+        $result = $parser->parse()->toArray();
 
         $this->assertEquals([
             'type' => 'Expression',
             'body' => [
                 [
                     'type'  => 'StringLiteral',
-                    'value' => 'some string',
+                    'value' => "'some string'",
                 ],
             ],
         ], $result);
@@ -58,52 +53,52 @@ class ParserTest extends TestCase
     /**
      * @throws SyntaxException
      */
-    public function testStringWithSpaceSurroundedWithDoubleQuoteShouldBeEvaluatedAsIs(): void
-    {
-        $string = "\"some string\"";
-        $parser = new Parser($string);
-
-        $result = $parser->parse();
-
-        $this->assertEquals([
-            'type' => 'Expression',
-            'body' => [
-                [
-                    'type'  => 'StringLiteral',
-                    'value' => 'some string',
-                ],
-            ],
-        ], $result);
-    }
+    //public function testStringWithSemicolonAfterStringLiteral(): void
+    //{
+    //    $string = 'some:string';
+    //    $parser = new Parser($string);
+    //
+    //    $result = $parser->parse()->toArray();
+    //
+    //    $this->assertEquals([
+    //        'type' => 'Expression',
+    //        'body' => [
+    //            [
+    //                'type'  => 'StringLiteral',
+    //                'value' => 'some',
+    //            ],
+    //            [
+    //                'type'  => 'StringLiteral',
+    //                'value' => ':',
+    //            ],
+    //            [
+    //                'type'  => 'StringLiteral',
+    //                'value' => 'string',
+    //            ],
+    //        ],
+    //    ], $result);
+    //}
 
     /**
      * @throws SyntaxException
      */
-    public function testStringWithSemicolonAfterStringLiteral(): void
-    {
-        $string = 'some:string';
-        $parser = new Parser($string);
-
-        $result = $parser->parse();
-
-        $this->assertEquals([
-            'type' => 'Expression',
-            'body' => [
-                [
-                    'type'  => 'StringLiteral',
-                    'value' => 'some',
-                ],
-                [
-                    'type'  => 'StringLiteral',
-                    'value' => ':',
-                ],
-                [
-                    'type'  => 'StringLiteral',
-                    'value' => 'string',
-                ],
-            ],
-        ], $result);
-    }
+    //public function testStringWithSpaceSurroundedWithDoubleQuoteShouldBeEvaluatedAsIs(): void
+    //{
+    //    $string = "\"some string\"";
+    //    $parser = new Parser($string);
+    //
+    //    $result = $parser->parse()->toArray();
+    //
+    //    $this->assertEquals([
+    //        'type' => 'Expression',
+    //        'body' => [
+    //            [
+    //                'type'  => 'StringLiteral',
+    //                'value' => 'some string',
+    //            ],
+    //        ],
+    //    ], $result);
+    //}
 
     /**
      * @throws SyntaxException
@@ -113,22 +108,14 @@ class ParserTest extends TestCase
         $string = 'some-string';
         $parser = new Parser($string);
 
-        $result = $parser->parse();
+        $result = $parser->parse()->toArray();
 
         $this->assertEquals([
             'type' => 'Expression',
             'body' => [
                 [
                     'type'  => 'StringLiteral',
-                    'value' => 'some',
-                ],
-                [
-                    'type'  => 'StringLiteral',
-                    'value' => '-',
-                ],
-                [
-                    'type'  => 'StringLiteral',
-                    'value' => 'string',
+                    'value' => 'some-string',
                 ],
             ],
         ], $result);
@@ -142,7 +129,7 @@ class ParserTest extends TestCase
         $string = 'some_string';
         $parser = new Parser($string);
 
-        $result = $parser->parse();
+        $result = $parser->parse()->toArray();
 
         $this->assertEquals([
             'type' => 'Expression',
@@ -163,7 +150,7 @@ class ParserTest extends TestCase
         $string = '${provider:argument}';
         $parser = new Parser($string);
 
-        $result = $parser->parse();
+        $result = $parser->parse()->toArray();
 
         $this->assertEquals([
             'type' => 'Expression',
@@ -190,7 +177,7 @@ class ParserTest extends TestCase
         $string = 'some-string-${provider:argument}';
         $parser = new Parser($string);
 
-        $result = $parser->parse();
+        $result = $parser->parse()->toArray();
 
         $this->assertEquals([
             'type' => 'Expression',
@@ -233,7 +220,7 @@ class ParserTest extends TestCase
         $string = 'some-string-${provider:${anotherProvider:argument}}';
         $parser = new Parser($string);
 
-        $result = $parser->parse();
+        $result = $parser->parse()->toArray();
 
         $this->assertEquals([
             'type' => 'Expression',
@@ -282,7 +269,7 @@ class ParserTest extends TestCase
         $string = 'some-string-${provider:argument1}-${anotherProvider:argument2}';
         $parser = new Parser($string);
 
-        $result = $parser->parse();
+        $result = $parser->parse()->toArray();
 
         $this->assertEquals([
             'type' => 'Expression',
@@ -339,7 +326,7 @@ class ParserTest extends TestCase
         $string = '${resolver:firstArgument:secondArgument}';
         $parser = new Parser($string);
 
-        $result = $parser->parse();
+        $result = $parser->parse()->toArray();
 
         $this->assertEquals([
             'type' => 'Expression',
@@ -370,7 +357,7 @@ class ParserTest extends TestCase
         $string = '${resolver:firstArgument:secondArgument:thirdArgument}';
         $parser = new Parser($string);
 
-        $result = $parser->parse();
+        $result = $parser->parse()->toArray();
 
         $this->assertEquals([
             'type' => 'Expression',
@@ -405,7 +392,7 @@ class ParserTest extends TestCase
         $string = '${resolver:[firstArgument, secondArgument, [sub_argument1, sub_argument2]]}';
         $parser = new Parser($string);
 
-        $result = $parser->parse();
+        $result = $parser->parse()->toArray();
 
         $this->assertEquals([
             'type' => 'Expression',
@@ -455,7 +442,7 @@ class ParserTest extends TestCase
         $string = '${resolver:[firstArgument, secondArgument, thirdArgument]}';
         $parser = new Parser($string);
 
-        $result = $parser->parse();
+        $result = $parser->parse()->toArray();
 
         $this->assertEquals([
             'type' => 'Expression',
@@ -496,7 +483,7 @@ class ParserTest extends TestCase
         $string = '${resolver:[firstArgument, secondArgument, ${anotherResolver:[1,2,3]}]}';
         $parser = new Parser($string);
 
-        $result = $parser->parse();
+        $result = $parser->parse()->toArray();
 
         $this->assertEquals([
             'type' => 'Expression',
@@ -542,6 +529,65 @@ class ParserTest extends TestCase
                             ],
                         ],
 
+                    ],
+                ],
+            ],
+        ], $result);
+    }
+
+    /**
+     * @throws SyntaxException
+     */
+    public function testParsingResolverWithPathArgument(): void
+    {
+        $string = '${self:path.1.name}';
+        $parser = new Parser($string);
+
+        $result = $parser->parse()->toArray();
+
+        $this->assertEquals([
+            'type' => 'Expression',
+            'body' => [
+                [
+                    'type'      => 'ResolverExpression',
+                    'provider'  => 'self',
+                    'arguments' => [
+                        [
+                            'type' => 'PathArgument',
+                            'path' => [
+                                'path',
+                                '1',
+                                'name',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ], $result);
+    }
+
+
+    /**
+     * @throws SyntaxException
+     */
+    public function testArgumentInSingleQuotesShouldBeParsedAsSingleStringLiteral(): void
+    {
+        $string = "\${now:'Y-m-d'}";
+        $parser = new Parser($string);
+
+        $result = $parser->parse()->toArray();
+
+        $this->assertEquals([
+            'type' => 'Expression',
+            'body' => [
+                [
+                    'type'      => 'ResolverExpression',
+                    'provider'  => 'now',
+                    'arguments' => [
+                        [
+                            'type'  => 'StringLiteral',
+                            'value' => 'Y-m-d',
+                        ],
                     ],
                 ],
             ],

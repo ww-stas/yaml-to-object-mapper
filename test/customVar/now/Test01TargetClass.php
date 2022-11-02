@@ -10,14 +10,14 @@ class Test01TargetClass implements YamlConfigurable
 {
     #[Required]
     #[ResolverType(ResolverType::EAGER)]
-    private \DateTime $value;
+    private string $value;
 
-    public function getValue(): \DateTime
+    public function getValue(): string
     {
         return $this->value;
     }
 
-    public function setValue(\DateTime $value): void
+    public function setValue(string $value): void
     {
         $this->value = $value;
     }

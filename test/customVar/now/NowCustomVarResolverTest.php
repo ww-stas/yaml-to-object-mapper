@@ -3,6 +3,7 @@
 namespace Test\CustomVar\Now;
 
 use Diezz\YamlToObjectMapper\ConfigMapper;
+use Diezz\YamlToObjectMapper\Resolver\ArgumentResolverException;
 use Diezz\YamlToObjectMapper\ValidationException;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
@@ -13,6 +14,7 @@ class NowCustomVarResolverTest extends TestCase
      *
      * @throws ReflectionException
      * @throws ValidationException
+     * @throws ArgumentResolverException
      */
     public function testShouldReturnCurrentDate(): void
     {
@@ -25,6 +27,6 @@ class NowCustomVarResolverTest extends TestCase
         $result = $mapper->mapFromFile(Test01TargetClass::class, $file);
 
         //Then
-        self::assertEquals($expectedResult, $result->getValue()->format('Y-m-d'));
+        self::assertEquals($expectedResult, $result->getValue());
     }
 }

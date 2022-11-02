@@ -13,13 +13,18 @@ class SelfArgumentResolver extends ArgumentResolver
         $config = $context->getConfig();
         $argumentResolverFactory = new ArgumentResolverFactory();
 
-        $path = explode(".", $this->method);
+        if (is_array($this->method)) {
+            $path = $this->method;
+        } else {
+            $path = explode(".", $this->method);
+        }
+        $pathRep = implode('.', $path);
 
         $result = $config;
 
         foreach ($path as $item) {
             if (!array_key_exists($item, $result)) {
-                throw new ArgumentResolverException("Path '$this->method' couldn't be resolved");
+                throw new ArgumentResolverException("Path '$pathRep' couldn't be resolved");
             }
 
             $result = $argumentResolverFactory->create($result[$item])->resolve($context);

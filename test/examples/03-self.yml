@@ -1,2 +1,2 @@
-name: Testing of $self argument resolver
+name: "Testing of $self argument resolver"
 target: ${self:name}

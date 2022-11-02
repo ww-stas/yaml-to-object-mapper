@@ -17,6 +17,8 @@ class Tokenizer
     public const T_ARRAY_BEGIN = 11;
     public const T_ARRAY_END = 12;
     public const T_COMMA = 13;
+    public const T_SPACE = 14;
+    public const T_DOT = 15;
 
 
     private string $string;
@@ -61,6 +63,16 @@ class Tokenizer
         return $this->cursor === strlen($this->string);
     }
 
+    public function isScalar(): bool
+    {
+        return preg_match("/\\$\{.*\}/", $this->string) === 0;
+    }
+
+    public function getString(): string
+    {
+        return $this->string;
+    }
+
     /**
      * Match a token for a regular expression
      */
@@ -89,7 +101,7 @@ class Tokenizer
     {
         return [
             //Skip spaces
-            SpecItem::of("/^\s+/", null),
+            SpecItem::of("/^\s+/", self::T_SPACE),
 
             //Special chars
             SpecItem::of("/^\\$\{/", self::T_BEGIN_OF_EXPRESSION),
@@ -99,13 +111,13 @@ class Tokenizer
             SpecItem::of("/^\[/", self::T_ARRAY_BEGIN),
             SpecItem::of("/^\]/", self::T_ARRAY_END),
             SpecItem::of("/^\,/", self::T_COMMA),
+            SpecItem::of("/^\./", self::T_DOT),
 
             // Literals
             SpecItem::of("/^\"[^\"]*\"/", self::T_QUOTED_STRING_LITERAL),
             SpecItem::of("/^'[^']*'/", self::T_QUOTED_STRING_LITERAL),
             SpecItem::of("/^\w+/", self::T_STRING_LITERAL),
             SpecItem::of("/^\d+/", self::T_NUMERIC_LITERAL),
-
         ];
     }
 

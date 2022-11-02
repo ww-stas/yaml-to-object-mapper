@@ -23,6 +23,7 @@ class EnvVariablesTest extends TestCase
         $result = ConfigMapper::make()->mapFromFile(EnvVariable11::class, $file);
 
         //Then
+        self::assertEquals('Test env variables', $result->name);
         self::assertEquals('some_value', $result->target);
     }
 }

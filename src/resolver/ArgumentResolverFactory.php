@@ -31,11 +31,23 @@ class ArgumentResolverFactory
     /**
      * @throws ArgumentResolverException
      */
+    public function create2(string $provider, array $arguments): ArgumentResolver
+    {
+        $argumentResolverClassName = $this->findArgumentResolverClassName($provider);
+
+        return new $argumentResolverClassName(...$arguments);
+    }
+
+    /**
+     * @throws ArgumentResolverException
+     */
     public function create(mixed $value): ArgumentResolver
     {
         if (is_bool($value) || is_int($value) || is_array($value)) {
             return new ScalarArgumentResolver($value);
         }
+
+        //if (preg_match(""))
 
         //Chained resolvers separated by | symbol
         if (preg_match('/\|/', $value)) {

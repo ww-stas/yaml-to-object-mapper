@@ -6,6 +6,9 @@ use Diezz\YamlToObjectMapper\Attributes\DefaultValueResolver;
 use Diezz\YamlToObjectMapper\Resolver\ArgumentResolver;
 use Diezz\YamlToObjectMapper\Resolver\ArgumentResolverFactory;
 use Diezz\YamlToObjectMapper\Resolver\Context;
+use Diezz\YamlToObjectMapper\Resolver\Parser\AST\ASTNode;
+use Diezz\YamlToObjectMapper\Resolver\Parser\Parser;
+use Diezz\YamlToObjectMapper\Resolver\ScalarArgumentResolver;
 use JetBrains\PhpStorm\Pure;
 use ReflectionException;
 use Symfony\Component\Yaml\Yaml;
@@ -72,6 +75,7 @@ class ConfigMapper
         }
 
         $this->context = new Context($config, $classInfo);
+
         return $this->doMap($classInfo, $config, $instance);
     }
 
@@ -94,6 +98,7 @@ class ConfigMapper
 
     /**
      * @throws Resolver\ArgumentResolverException
+     * @throws Resolver\Parser\SyntaxException
      */
     private function doMap(ClassInfo $classInfo, ?array $config, $resultInstance, $parentKey = null): YamlConfigurable
     {
@@ -130,7 +135,12 @@ class ConfigMapper
                     }
                 }
             } else {
-                $value = $this->argumentResolverFactory->create($rawValue);
+                if (is_bool($rawValue) || is_int($rawValue) || is_array($rawValue)) {
+                    $value =  new ScalarArgumentResolver($rawValue);
+                } else {
+                    $parser = new Parser($rawValue);
+                    $value = $parser->parse();//$this->argumentResolverFactory->create($rawValue);
+                }
             }
 
             $this->setValue($field, $value, $resultInstance);
@@ -142,6 +152,10 @@ class ConfigMapper
 
     private function setValue(ClassField $field, $value, $resultInstance): void
     {
+        if ($value instanceof ASTNode) {
+            $value = $value->run($this->context);
+        }
+
         if ($value instanceof ArgumentResolver) {
             $value = $value->resolve($this->context);
         }

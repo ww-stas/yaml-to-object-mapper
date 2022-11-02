@@ -3,7 +3,10 @@
 namespace Test;
 
 use Diezz\YamlToObjectMapper\ConfigMapper;
+use Diezz\YamlToObjectMapper\Resolver\ArgumentResolverException;
+use Diezz\YamlToObjectMapper\ValidationException;
 use PHPUnit\Framework\TestCase;
+use ReflectionException;
 use Test\Examples\ListModel01;
 use Test\Examples\ListModel02;
 
@@ -11,8 +14,8 @@ class ListMappingTest extends TestCase
 {
 
     /**
-     * @throws \ReflectionException
-     * @throws \Diezz\YamlToObjectMapper\ValidationException
+     * @throws ReflectionException
+     * @throws ValidationException
      */
     public function testListMapping(): void
     {
@@ -34,6 +37,11 @@ class ListMappingTest extends TestCase
         self::assertEquals('three', $list['three']);
     }
 
+    /**
+     * @throws ReflectionException
+     * @throws ArgumentResolverException
+     * @throws ValidationException
+     */
     public function testListMappingWithNestedSubclasses(): void
     {
         //Given
