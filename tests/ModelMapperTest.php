@@ -7,6 +7,9 @@ use Diezz\YamlToObjectMapper\ValidationException;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
 
+/**
+ * @covers \Diezz\YamlToObjectMapper\ConfigMapper
+ */
 class ModelMapperTest extends TestCase
 {
     private ConfigMapper $mapper;

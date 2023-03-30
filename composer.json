@@ -14,7 +14,7 @@
     "autoload": {
         "psr-4": {
             "Diezz\\YamlToObjectMapper\\": "src/",
-            "Test\\": "test/"
+            "Test\\": "tests/"
         }
     }
 }

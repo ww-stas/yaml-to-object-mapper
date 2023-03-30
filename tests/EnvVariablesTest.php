@@ -6,6 +6,9 @@ use Diezz\YamlToObjectMapper\ConfigMapper;
 use PHPUnit\Framework\TestCase;
 use Test\Examples\EnvVariable11;
 
+/**
+ * @covers \Diezz\YamlToObjectMapper\Resolver\EnvironmentArgumentResolver
+ */
 class EnvVariablesTest extends TestCase
 {
     protected function setUp():void

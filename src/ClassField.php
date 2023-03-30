@@ -11,7 +11,16 @@ class ClassField
     private string $name;
     private bool $required;
     private ?string $type = null;
+    /**
+     * List means that field has an array type
+     * @var bool
+     */
     private bool $isList = false;
+    /**
+     * Whether the list typed explicitly with #[Collection] attribute
+     * @var bool
+     */
+    private bool $isCollection = false;
     private ?ClassInfo $classInfo = null;
     private string $setter;
     private bool $isPublic = true;
@@ -26,6 +35,22 @@ class ClassField
     public function getArgumentResolverType(): int
     {
         return $this->argumentResolverType;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCollection(): bool
+    {
+        return $this->isCollection;
+    }
+
+    /**
+     * @param bool $isCollection
+     */
+    public function setIsCollection(bool $isCollection): void
+    {
+        $this->isCollection = $isCollection;
     }
 
     /**
@@ -114,7 +139,7 @@ class ClassField
 
     public function isPrimitive(): bool
     {
-        return null === $this->classInfo;
+        return null === $this->classInfo && !$this->isList();
     }
 
     /**

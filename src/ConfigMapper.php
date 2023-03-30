@@ -59,7 +59,7 @@ class ConfigMapper
      * @param class-string<T> $targetClass
      *
      * @throws ValidationException
-     * @throws ReflectionException|Resolver\ArgumentResolverException
+     * @throws ReflectionException|Resolver\ArgumentResolverException|Resolver\Parser\SyntaxException
      *
      * @return T
      */
@@ -124,22 +124,25 @@ class ConfigMapper
                 $rawValue = $config[$fieldName];
             }
 
-            if (!$field->isPrimitive()) {
-                $targetClassName = $field->getType();
-                if (!$field->isList()) {
-                    $value = $this->doMap($field->getClassInfo(), $rawValue, $field->newInstance());
+            if ($field->isPrimitive()) {
+                if (is_bool($rawValue) || is_int($rawValue) || is_array($rawValue)) {
+                    $value = new ScalarArgumentResolver($rawValue);
                 } else {
-                    $value = [];
-                    foreach ($rawValue as $key => $item) {
-                        $value[] = $this->doMap($field->getClassInfo(), $item, new $targetClassName, $key);
-                    }
+                    $value = (new Parser($rawValue))->parse();
                 }
             } else {
-                if (is_bool($rawValue) || is_int($rawValue) || is_array($rawValue)) {
-                    $value =  new ScalarArgumentResolver($rawValue);
+                $targetClassName = $field->getType();
+                if ($field->isList()) {
+                    $value = [];
+                    if ($field->isCollection()) {
+                        foreach ($rawValue as $key => $item) {
+                            $value[] = $this->doMap($field->getClassInfo(), $item, new $targetClassName, $key);
+                        }
+                    } else {
+                        $value = $this->doMapArray($rawValue);
+                    }
                 } else {
-                    $parser = new Parser($rawValue);
-                    $value = $parser->parse();//$this->argumentResolverFactory->create($rawValue);
+                    $value = $this->doMap($field->getClassInfo(), $rawValue, $field->newInstance());
                 }
             }
 
@@ -149,6 +152,30 @@ class ConfigMapper
         return $resultInstance;
     }
 
+    /**
+     * @throws Resolver\Parser\SyntaxException
+     */
+    private function doMapArray(array $array): array
+    {
+        $result = [];
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $result[$key] = $this->doMapArray($value);
+            } else {
+                $result[$key] = $this->parseAndResolve($value);
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @throws Resolver\Parser\SyntaxException
+     */
+    private function parseAndResolve($rawValue)
+    {
+        return (new Parser($rawValue))->parse()->run($this->context);
+    }
 
     private function setValue(ClassField $field, $value, $resultInstance): void
     {
@@ -209,8 +236,8 @@ class ConfigMapper
                 }
             }
 
-            if (false === $field->isPrimitive()) {
-                if ($field->isList()) {
+            if (null !== $field->getClassInfo()) {
+                if ($field->isCollection()) {
                     if ($isRequired === false && !$isFieldExistsInConfig) {
                         continue;
                     }

@@ -6,15 +6,15 @@ class FormatArgumentResolver extends ArgumentResolver
 {
     protected function doResolve($context = null)
     {
-        if ($context === null) {
-            throw new \RuntimeException('The context must not be null');
-        }
+        //if ($context === null) {
+        //    throw new \RuntimeException('The context must not be null');
+        //}
+        //
+        //if (!$context instanceof \DateTime) {
+        //    throw new \RuntimeException('The context must be the instance of \DateTime ');
+        //}
 
-        if (!$context instanceof \DateTime) {
-            throw new \RuntimeException('The context must be the instance of \DateTime ');
-        }
-
-        return $context->format($this->method);
+        return $this->method->format($this->argument);
     }
 
     public function getName(): string

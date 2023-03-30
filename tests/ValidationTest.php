@@ -8,6 +8,9 @@ use PHPUnit\Framework\TestCase;
 use Test\Examples\Required08;
 use Test\Examples\Required09;
 
+/**
+ * @covers \Diezz\YamlToObjectMapper\ConfigMapper
+ */
 class ValidationTest extends TestCase
 {
     public function testRequiredValidationOnMissedField(): void

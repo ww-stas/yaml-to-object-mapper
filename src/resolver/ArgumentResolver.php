@@ -4,8 +4,6 @@ namespace Diezz\YamlToObjectMapper\Resolver;
 
 abstract class ArgumentResolver
 {
-    public const ARRAY_NOTATION = '/\[((.+),?)+]/';
-
     protected mixed $method;
     protected mixed $argument;
     protected ?ArgumentResolver $after = null;
@@ -19,63 +17,6 @@ abstract class ArgumentResolver
         $this->method = $method;
         $this->argument = $argument;
     }
-
-//    public static function make(mixed $value): static
-//    {
-//        if (is_bool($value) || is_int($value)) {
-//            return new ScalarArgumentResolver($value);
-//        }
-//
-//        if (preg_match('/\|/', $value)) {
-//            $values = explode("|", $value);
-//            $resolvers = [];
-//            foreach ($values as $val) {
-//                $resolvers[] = static::make($val);
-//            }
-//            for ($i = count($resolvers) - 1; $i > 0; $i--) {
-//                $resolvers[$i - 1]->setAfter($resolvers[$i]);
-//            }
-//
-//            return $resolvers[0];
-//        }
-//
-//        if (!preg_match('/\$?\w+::.+(::.+)?/', $value)) {
-//            return new ScalarArgumentResolver($value);
-//        }
-//
-//        $result = explode("::", $value);
-//        if (count($result) === 3) {
-//            [$provider, $method, $argument] = $result;
-//        } else if (count($result) > 3) {
-//            $provider = array_shift($result);
-//            $method = array_shift($result);
-//            $argument = $result;
-//        } else {
-//            [$provider, $method] = $result;
-//            $argument = null;
-//        }
-//
-//        if (preg_match('/\$([a-z]+)/i', $provider, $matches)) {
-//            $provider = $matches[1];
-//        }
-//        if (is_string($argument) && preg_match(self::ARRAY_NOTATION, $argument, $matches)) {
-//            $argument = [array_map(static fn($item) => trim($item), explode(',', $matches[1]))];
-//        }
-//        if (is_string($method) && preg_match(self::ARRAY_NOTATION, $method, $matches)) {
-//            $method = array_map(static fn($item) => trim($item), explode(',', $matches[1]));
-//        }
-//
-//        $providerClass = 'Diezz\YamlToObjectMapper\Resolver\\' . ucfirst($provider) . "ArgumentResolver";
-//        if (!class_exists($providerClass)) {
-//            throw new \RuntimeException("Provider $providerClass doesn't exist");
-//        }
-//        if (!is_subclass_of($providerClass, __CLASS__)) {
-//            throw new \RuntimeException("The provider $providerClass must extends Provider abstract class");
-//        }
-//
-//        /** @var  ArgumentResolver $instance */
-//        return new $providerClass($method, $argument);
-//    }
 
     /**
      * @param ArgumentResolver|null $after

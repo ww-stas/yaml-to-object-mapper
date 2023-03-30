@@ -119,13 +119,15 @@ class ClassInfoReflector
         $typeName = $type->getName();
         $isNested = false;
         $isList = false;
+        $isCollection = false;
         if (!$type->isBuiltin()) {
             $isNested = is_subclass_of($type->getName(), YamlConfigurable::class);
         } else if ('array' === $type->getName()) {
             $attributes = $reflectionProperty->getAttributes(Collection::class);
+            $isList = true;
             if (!empty($attributes)) {
                 $isNested = true;
-                $isList = true;
+                $isCollection = true;
                 /** @var Collection $attribute */
                 $attribute = $attributes[0]->newInstance();
                 $typeName = $attribute->getClass();
@@ -134,6 +136,7 @@ class ClassInfoReflector
 
         $classField->setType($typeName);
         $classField->setIsList($isList);
+        $classField->setIsCollection($isCollection);
         if ($isNested && is_subclass_of($typeName, YamlConfigurable::class)) {
             if ($typeName === $reflectionProperty->class) {
                 //prevent loop on nested elements of the same type

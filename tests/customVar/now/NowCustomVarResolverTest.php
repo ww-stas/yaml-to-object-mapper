@@ -8,6 +8,9 @@ use Diezz\YamlToObjectMapper\ValidationException;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
 
+/**
+ * @covers \Diezz\YamlToObjectMapper\Resolver\NowArgumentResolver
+ */
 class NowCustomVarResolverTest extends TestCase
 {
     /**

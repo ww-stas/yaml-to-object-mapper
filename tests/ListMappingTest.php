@@ -10,6 +10,9 @@ use ReflectionException;
 use Test\Examples\ListModel01;
 use Test\Examples\ListModel02;
 
+/**
+ * @covers \Diezz\YamlToObjectMapper\ConfigMapper
+ */
 class ListMappingTest extends TestCase
 {
 
@@ -34,7 +37,7 @@ class ListMappingTest extends TestCase
         self::assertArrayHasKey('two', $list);
         self::assertEquals('two', $list['two']);
         self::assertArrayHasKey('three', $list);
-        self::assertEquals('three', $list['three']);
+        self::assertEquals($result->name, $list['three']);
     }
 
     /**

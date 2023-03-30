@@ -11,6 +11,9 @@ use Test\Examples\ListModel02;
 use Test\Examples\Person;
 use Test\Examples\RequiredModel;
 
+/**
+ * @covers \Diezz\YamlToObjectMapper\ConfigMapper
+ */
 class ClassInfoReflectorTest extends TestCase
 {
     private ClassInfoReflector $reflector;

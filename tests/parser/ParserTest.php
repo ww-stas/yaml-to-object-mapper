@@ -6,6 +6,9 @@ use Diezz\YamlToObjectMapper\Resolver\Parser\Parser;
 use Diezz\YamlToObjectMapper\Resolver\Parser\SyntaxException;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \Diezz\YamlToObjectMapper\Resolver\Parser\Parser
+ */
 class ParserTest extends TestCase
 {
     /**
@@ -49,56 +52,6 @@ class ParserTest extends TestCase
             ],
         ], $result);
     }
-
-    /**
-     * @throws SyntaxException
-     */
-    //public function testStringWithSemicolonAfterStringLiteral(): void
-    //{
-    //    $string = 'some:string';
-    //    $parser = new Parser($string);
-    //
-    //    $result = $parser->parse()->toArray();
-    //
-    //    $this->assertEquals([
-    //        'type' => 'Expression',
-    //        'body' => [
-    //            [
-    //                'type'  => 'StringLiteral',
-    //                'value' => 'some',
-    //            ],
-    //            [
-    //                'type'  => 'StringLiteral',
-    //                'value' => ':',
-    //            ],
-    //            [
-    //                'type'  => 'StringLiteral',
-    //                'value' => 'string',
-    //            ],
-    //        ],
-    //    ], $result);
-    //}
-
-    /**
-     * @throws SyntaxException
-     */
-    //public function testStringWithSpaceSurroundedWithDoubleQuoteShouldBeEvaluatedAsIs(): void
-    //{
-    //    $string = "\"some string\"";
-    //    $parser = new Parser($string);
-    //
-    //    $result = $parser->parse()->toArray();
-    //
-    //    $this->assertEquals([
-    //        'type' => 'Expression',
-    //        'body' => [
-    //            [
-    //                'type'  => 'StringLiteral',
-    //                'value' => 'some string',
-    //            ],
-    //        ],
-    //    ], $result);
-    //}
 
     /**
      * @throws SyntaxException
@@ -584,6 +537,55 @@ class ParserTest extends TestCase
                     'type'      => 'ResolverExpression',
                     'provider'  => 'now',
                     'arguments' => [
+                        [
+                            'type'  => 'StringLiteral',
+                            'value' => 'Y-m-d',
+                        ],
+                    ],
+                ],
+            ],
+        ], $result);
+    }
+
+    public function testResolverExpressionWithoutArguments(): void
+    {
+        $string = "\${now}";
+        $parser = new Parser($string);
+
+        $result = $parser->parse()->toArray();
+
+        $this->assertEquals([
+            'type' => 'Expression',
+            'body' => [
+                [
+                    'type'      => 'ResolverExpression',
+                    'provider'  => 'now',
+                    'arguments' => [
+                    ],
+                ],
+            ],
+        ], $result);
+    }
+
+    public function testShouldParseArgumentResolverAsArgumentOfAnotherResolver(): void
+    {
+        $string = "\${format:\${now}:'Y-m-d'}";
+        $parser = new Parser($string);
+
+        $result = $parser->parse()->toArray();
+
+        $this->assertEquals([
+            'type' => 'Expression',
+            'body' => [
+                [
+                    'type'      => 'ResolverExpression',
+                    'provider'  => 'format',
+                    'arguments' => [
+                        [
+                            'type'      => 'ResolverExpression',
+                            'provider'  => 'now',
+                            'arguments' => [],
+                        ],
                         [
                             'type'  => 'StringLiteral',
                             'value' => 'Y-m-d',

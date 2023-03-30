@@ -9,6 +9,9 @@ use Test\Examples\Self03;
 use Test\Examples\Self04;
 use Test\Examples\Self05;
 
+/**
+ * @covers \Diezz\YamlToObjectMapper\Resolver\SelfArgumentResolver
+ */
 class SelfArgumentMappingTest extends TestCase
 {
     public function testSelfArgumentResolver(): void

@@ -59,7 +59,7 @@ class ResolverExpression extends ASTNode
         foreach ($this->arguments as $argument) {
             $arguments[] = $argument->run($context);
         }
-        $argumentResolver = $argumentResolverFactory->create2($this->getProvider(), $arguments);
+        $argumentResolver = $argumentResolverFactory->create($this->getProvider(), $arguments);
 
         return $argumentResolver->resolve($context);
     }

@@ -8,8 +8,6 @@ use Diezz\YamlToObjectMapper\Resolver\Parser\AST\Expression;
 use Diezz\YamlToObjectMapper\Resolver\Parser\AST\PathArgument;
 use Diezz\YamlToObjectMapper\Resolver\Parser\AST\ResolverExpression;
 use Diezz\YamlToObjectMapper\Resolver\Parser\AST\StringLiteral;
-use JetBrains\PhpStorm\ArrayShape;
-
 
 class Parser
 {
@@ -144,8 +142,11 @@ class Parser
         $this->context = self::CONTEXT_ARGUMENT_RESOLVER;
         $this->eat(Tokenizer::T_BEGIN_OF_EXPRESSION);
         $provider = $this->eat(Tokenizer::T_STRING_LITERAL);
-        $this->eat(Tokenizer::T_SEMICOLON);
-        $arguments = $this->argumentList();
+        $arguments = [];
+        if ($this->lookahead->getTokenType() === Tokenizer::T_SEMICOLON) {
+            $this->eat(Tokenizer::T_SEMICOLON);
+            $arguments = $this->argumentList();
+        }
         $this->eat(Tokenizer::T_END_OF_EXPRESSION);
         $this->context = null;
 
@@ -161,7 +162,7 @@ class Parser
         $list = [];
 
         while ($this->lookahead->getTokenType() !== Tokenizer::T_END_OF_EXPRESSION) {
-            $list[] = $this->statement();
+            $list[] = $this->resolverContext();
             if ($this->lookahead->getTokenType() === Tokenizer::T_SEMICOLON) {
                 $this->eat(Tokenizer::T_SEMICOLON);
             }
@@ -212,7 +213,6 @@ class Parser
     /**
      * @throws SyntaxException
      */
-    #[ArrayShape(['type' => "string", 'value' => "string"])]
     private function quotedStringLiteral(): StringLiteral
     {
         $token = $this->eat(Tokenizer::T_QUOTED_STRING_LITERAL);

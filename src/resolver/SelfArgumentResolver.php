@@ -27,7 +27,7 @@ class SelfArgumentResolver extends ArgumentResolver
                 throw new ArgumentResolverException("Path '$pathRep' couldn't be resolved");
             }
 
-            $result = $argumentResolverFactory->create($result[$item])->resolve($context);
+            $result = $result[$item];
         }
 
         return $result;
