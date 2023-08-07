@@ -2,7 +2,7 @@
 
 namespace Diezz\YamlToObjectMapper\Resolver;
 
-class SubstringArgumentResolver extends ArgumentResolver
+class SubstringArgumentResolver extends CustomArgumentResolver
 {
     protected function doResolve($context = null): string
     {

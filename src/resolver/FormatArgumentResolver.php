@@ -2,7 +2,7 @@
 
 namespace Diezz\YamlToObjectMapper\Resolver;
 
-class FormatArgumentResolver extends ArgumentResolver
+class FormatArgumentResolver extends CustomArgumentResolver
 {
     protected function doResolve($context = null)
     {

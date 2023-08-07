@@ -2,7 +2,7 @@
 
 namespace Diezz\YamlToObjectMapper\Resolver;
 
-class ScalarArgumentResolver extends ArgumentResolver
+class ScalarArgumentResolver extends CustomArgumentResolver
 {
     private string $type;
 

@@ -6,7 +6,7 @@ use Diezz\YamlToObjectMapper\ClassField;
 use Diezz\YamlToObjectMapper\ClassInfo;
 use JetBrains\PhpStorm\ArrayShape;
 
-class InstanceArgumentResolver extends ArgumentResolver
+class InstanceArgumentResolver extends SystemArgumentResolver
 {
     private ClassInfo $classInfo;
 
@@ -51,8 +51,8 @@ class InstanceArgumentResolver extends ArgumentResolver
         return $this->rawValue;
     }
 
-    public function getName(): string
+    public function findByPath(string $path): ?ArgumentResolver
     {
-        return 'instance';
+        return $this->getConfig()[$path] ?? null;
     }
 }

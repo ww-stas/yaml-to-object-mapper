@@ -11,7 +11,7 @@ use DateTime;
  * Example of usage:
  * $now::Y-m-d H:i:s
  */
-class NowArgumentResolver extends ArgumentResolver
+class NowArgumentResolver extends CustomArgumentResolver
 {
     public function getName(): string
     {

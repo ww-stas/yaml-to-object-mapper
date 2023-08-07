@@ -2,7 +2,7 @@
 
 namespace Diezz\YamlToObjectMapper\Resolver;
 
-class ListArgumentResolver extends ArgumentResolver
+class ListArgumentResolver extends SystemArgumentResolver
 {
     protected function doResolve($context = null)
     {
@@ -14,8 +14,8 @@ class ListArgumentResolver extends ArgumentResolver
         return $result;
     }
 
-    public function getName(): string
+    public function findByPath(string $path): ?ArgumentResolver
     {
-        return 'list';
+        return $this->rawValue[$path] ?? null;
     }
 }

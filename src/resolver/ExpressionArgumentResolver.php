@@ -5,7 +5,7 @@ namespace Diezz\YamlToObjectMapper\Resolver;
 use Diezz\YamlToObjectMapper\Resolver\Parser\Parser;
 use Diezz\YamlToObjectMapper\Resolver\Parser\SyntaxException;
 
-class ExpressionArgumentResolver extends ArgumentResolver
+class ExpressionArgumentResolver extends CustomArgumentResolver
 {
     /**
      * @throws SyntaxException
