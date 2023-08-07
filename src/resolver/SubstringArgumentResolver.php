@@ -2,11 +2,11 @@
 
 namespace Diezz\YamlToObjectMapper\Resolver;
 
-class SubstringArgumentResolver extends ArgumentResolver
+class SubstringArgumentResolver extends CustomArgumentResolver
 {
     protected function doResolve($context = null): string
     {
-        return substr($context, (int)$this->method);
+        return substr($context, (int)$this->rawValue);
     }
 
     public function getName(): string

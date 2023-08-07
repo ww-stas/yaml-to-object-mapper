@@ -11,7 +11,7 @@ use DateTime;
  * Example of usage:
  * $now::Y-m-d H:i:s
  */
-class NowArgumentResolver extends ArgumentResolver
+class NowArgumentResolver extends CustomArgumentResolver
 {
     public function getName(): string
     {
@@ -21,8 +21,8 @@ class NowArgumentResolver extends ArgumentResolver
     protected function doResolve($context = null): mixed
     {
         $now = new DateTime();
-        if ($this->method !== null) {
-            return $now->format($this->method);
+        if ($this->rawValue !== null) {
+            return $now->format($this->rawValue);
         }
 
         return $now;

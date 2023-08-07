@@ -2,7 +2,7 @@
 
 namespace Diezz\YamlToObjectMapper\Resolver;
 
-class FormatArgumentResolver extends ArgumentResolver
+class FormatArgumentResolver extends CustomArgumentResolver
 {
     protected function doResolve($context = null)
     {
@@ -14,7 +14,7 @@ class FormatArgumentResolver extends ArgumentResolver
         //    throw new \RuntimeException('The context must be the instance of \DateTime ');
         //}
 
-        return $this->method->format($this->argument);
+        return $this->rawValue->format($this->argument);
     }
 
     public function getName(): string

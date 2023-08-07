@@ -20,7 +20,7 @@ class ClassField
      * Whether the list typed explicitly with #[Collection] attribute
      * @var bool
      */
-    private bool $isCollection = false;
+    private bool $isTypedCollection = false;
     private ?ClassInfo $classInfo = null;
     private string $setter;
     private bool $isPublic = true;
@@ -40,17 +40,17 @@ class ClassField
     /**
      * @return bool
      */
-    public function isCollection(): bool
+    public function isTypedCollection(): bool
     {
-        return $this->isCollection;
+        return $this->isTypedCollection;
     }
 
     /**
-     * @param bool $isCollection
+     * @param bool $isTypedCollection
      */
-    public function setIsCollection(bool $isCollection): void
+    public function setIsTypedCollection(bool $isTypedCollection): void
     {
-        $this->isCollection = $isCollection;
+        $this->isTypedCollection = $isTypedCollection;
     }
 
     /**

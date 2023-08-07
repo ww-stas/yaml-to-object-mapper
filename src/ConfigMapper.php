@@ -3,11 +3,10 @@
 namespace Diezz\YamlToObjectMapper;
 
 use Diezz\YamlToObjectMapper\Attributes\DefaultValueResolver;
-use Diezz\YamlToObjectMapper\Resolver\ArgumentResolver;
-use Diezz\YamlToObjectMapper\Resolver\ArgumentResolverFactory;
 use Diezz\YamlToObjectMapper\Resolver\Context;
-use Diezz\YamlToObjectMapper\Resolver\Parser\AST\ASTNode;
-use Diezz\YamlToObjectMapper\Resolver\Parser\Parser;
+use Diezz\YamlToObjectMapper\Resolver\ExpressionArgumentResolver;
+use Diezz\YamlToObjectMapper\Resolver\InstanceArgumentResolver;
+use Diezz\YamlToObjectMapper\Resolver\ListArgumentResolver;
 use Diezz\YamlToObjectMapper\Resolver\ScalarArgumentResolver;
 use JetBrains\PhpStorm\Pure;
 use ReflectionException;
@@ -15,23 +14,9 @@ use Symfony\Component\Yaml\Yaml;
 
 class ConfigMapper
 {
-    private ArgumentResolverFactory $argumentResolverFactory;
-    private Context $context;
-
-    /**
-     * @param ArgumentResolverFactory $argumentResolverFactory
-     */
-    public function __construct(ArgumentResolverFactory $argumentResolverFactory)
-    {
-        $this->argumentResolverFactory = $argumentResolverFactory;
-    }
-
-
     #[Pure] public static function make(): static
     {
-        $argumentResolverFactory = new ArgumentResolverFactory();
-
-        return new static($argumentResolverFactory);
+        return new static();
     }
 
     /**
@@ -42,6 +27,7 @@ class ConfigMapper
      * @throws ReflectionException
      * @throws ValidationException
      * @throws Resolver\ArgumentResolverException
+     * @throws Resolver\Parser\SyntaxException
      * @return T
      *
      * @todo     get rid of Reflection exception
@@ -74,9 +60,11 @@ class ConfigMapper
             throw new ValidationException($validationResult);
         }
 
-        $this->context = new Context($config, $classInfo);
+        $preMap = $this->getMappingConfig($classInfo, $config, $instance);
+        $rootResolver = new InstanceArgumentResolver($preMap);
+        $rootResolver->setClassInfo($classInfo);
 
-        return $this->doMap($classInfo, $config, $instance);
+        return $rootResolver->resolve(new Context($config, $rootResolver));
     }
 
     /**
@@ -85,7 +73,7 @@ class ConfigMapper
      * @param class-string<T> $targetClass
      *
      * @throws ValidationException
-     * @throws ReflectionException|Resolver\ArgumentResolverException
+     * @throws ReflectionException|Resolver\ArgumentResolverException|Resolver\Parser\SyntaxException
      *
      * @return T
      */
@@ -100,8 +88,10 @@ class ConfigMapper
      * @throws Resolver\ArgumentResolverException
      * @throws Resolver\Parser\SyntaxException
      */
-    private function doMap(ClassInfo $classInfo, ?array $config, $resultInstance, $parentKey = null): YamlConfigurable
+    private function getMappingConfig(ClassInfo $classInfo, ?array $config, $parentKey = null): array
     {
+        $mappingConfig = [];
+
         if ($config === null) {
             $config = [];
         }
@@ -124,32 +114,36 @@ class ConfigMapper
                 $rawValue = $config[$fieldName];
             }
 
+            $argResolver = null;
+
             if ($field->isPrimitive()) {
                 if (is_bool($rawValue) || is_int($rawValue) || is_array($rawValue)) {
-                    $value = new ScalarArgumentResolver($rawValue);
+                    $argResolver = new ScalarArgumentResolver($rawValue);
                 } else {
-                    $value = (new Parser($rawValue))->parse();
+                    $argResolver = new ExpressionArgumentResolver($rawValue);
                 }
-            } else {
-                $targetClassName = $field->getType();
-                if ($field->isList()) {
-                    $value = [];
-                    if ($field->isCollection()) {
-                        foreach ($rawValue as $key => $item) {
-                            $value[] = $this->doMap($field->getClassInfo(), $item, new $targetClassName, $key);
-                        }
-                    } else {
-                        $value = $this->doMapArray($rawValue);
+            } else if ($field->isList()) {
+                $value = [];
+                if ($field->isTypedCollection()) {
+                    foreach ($rawValue as $key => $item) {
+                        $resolver = new InstanceArgumentResolver($this->getMappingConfig($field->getClassInfo(), $item, $key));
+                        $resolver->setClassInfo($field->getClassInfo());
+                        $value[] = $resolver;
                     }
                 } else {
-                    $value = $this->doMap($field->getClassInfo(), $rawValue, $field->newInstance());
+                    $value = $this->doMapArray($rawValue);
                 }
+
+                $argResolver = new ListArgumentResolver($value);
+            } else {
+                $argResolver = new InstanceArgumentResolver($this->getMappingConfig($field->getClassInfo(), $rawValue, $field->newInstance()));
+                $argResolver->setClassInfo($field->getClassInfo());
             }
 
-            $this->setValue($field, $value, $resultInstance);
+            $mappingConfig[$fieldName] = $argResolver;
         }
 
-        return $resultInstance;
+        return $mappingConfig;
     }
 
     /**
@@ -162,40 +156,11 @@ class ConfigMapper
             if (is_array($value)) {
                 $result[$key] = $this->doMapArray($value);
             } else {
-                $result[$key] = $this->parseAndResolve($value);
+                $result[$key] = new ExpressionArgumentResolver($value);
             }
         }
 
         return $result;
-    }
-
-    /**
-     * @throws Resolver\Parser\SyntaxException
-     */
-    private function parseAndResolve($rawValue)
-    {
-        return (new Parser($rawValue))->parse()->run($this->context);
-    }
-
-    private function setValue(ClassField $field, $value, $resultInstance): void
-    {
-        if ($value instanceof ASTNode) {
-            $value = $value->run($this->context);
-        }
-
-        if ($value instanceof ArgumentResolver) {
-            $value = $value->resolve($this->context);
-        }
-
-        if ($value === null && $field->hasDefaultValue()) {
-            return;
-        }
-
-        if ($field->isPublic()) {
-            $resultInstance->{$field->getName()} = $value;
-        } else {
-            $resultInstance->{$field->getSetter()}($value);
-        }
     }
 
     private function validate(ClassInfo $classInfo, ?array $config, ?array $parent = [], ?ConfigValidationResult $validationResult = null): ConfigValidationResult
@@ -237,7 +202,7 @@ class ConfigMapper
             }
 
             if (null !== $field->getClassInfo()) {
-                if ($field->isCollection()) {
+                if ($field->isTypedCollection()) {
                     if ($isRequired === false && !$isFieldExistsInConfig) {
                         continue;
                     }

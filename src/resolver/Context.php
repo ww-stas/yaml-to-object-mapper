@@ -2,13 +2,11 @@
 
 namespace Diezz\YamlToObjectMapper\Resolver;
 
-use Diezz\YamlToObjectMapper\ClassInfo;
-
 class Context
 {
     public function __construct(
-        private array     $config,
-        private ClassInfo $classInfo,
+        private array                  $config,
+        private SystemArgumentResolver $mappingConfig,
     )
     {
     }
@@ -21,11 +19,8 @@ class Context
         return $this->config;
     }
 
-    /**
-     * @return ClassInfo
-     */
-    public function getClassInfo(): ClassInfo
+    public function getMappingConfig(): SystemArgumentResolver
     {
-        return $this->classInfo;
+        return $this->mappingConfig;
     }
 }

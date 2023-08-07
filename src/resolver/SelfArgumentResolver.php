@@ -2,7 +2,7 @@
 
 namespace Diezz\YamlToObjectMapper\Resolver;
 
-class SelfArgumentResolver extends ArgumentResolver
+class SelfArgumentResolver extends CustomArgumentResolver
 {
     /**
      * @throws ArgumentResolverException
@@ -10,24 +10,24 @@ class SelfArgumentResolver extends ArgumentResolver
      */
     protected function doResolve($context = null)
     {
-        $config = $context->getConfig();
-        $argumentResolverFactory = new ArgumentResolverFactory();
-
-        if (is_array($this->method)) {
-            $path = $this->method;
+        if (is_array($this->rawValue)) {
+            $path = $this->rawValue;
         } else {
-            $path = explode(".", $this->method);
+            $path = explode(".", $this->rawValue);
         }
         $pathRep = implode('.', $path);
 
-        $result = $config;
+        $result = $context->getMappingConfig();
 
         foreach ($path as $item) {
-            if (!array_key_exists($item, $result)) {
+            $resolver = $result->findByPath($item);
+            if ($resolver instanceof SystemArgumentResolver) {
+                $result = $resolver;
+            } else if ($resolver instanceof CustomArgumentResolver) {
+                $result = $resolver->resolve($context);
+            } else {
                 throw new ArgumentResolverException("Path '$pathRep' couldn't be resolved");
             }
-
-            $result = $result[$item];
         }
 
         return $result;

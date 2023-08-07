@@ -2,7 +2,7 @@
 
 namespace Diezz\YamlToObjectMapper\Resolver;
 
-class ScalarArgumentResolver extends ArgumentResolver
+class ScalarArgumentResolver extends CustomArgumentResolver
 {
     private string $type;
 
@@ -16,13 +16,13 @@ class ScalarArgumentResolver extends ArgumentResolver
 
     protected function doResolve($context = null)
     {
-        $result = $this->method;
+        $result = $this->rawValue;
 
 //        if ($this->type === 'string') {
 //            return (string)$result;
 //        }
 
-        return $this->method;
+        return $this->rawValue;
     }
 
     public function getName(): string

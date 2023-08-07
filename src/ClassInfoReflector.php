@@ -18,6 +18,7 @@ class ClassInfoReflector
     public function introspect(string $targetClass): ClassInfo
     {
         $instance = new ClassInfo();
+        $instance->setClassName($targetClass);
 
         $reflection = new ReflectionClass($targetClass);
         $properties = $reflection->getProperties();
@@ -136,7 +137,7 @@ class ClassInfoReflector
 
         $classField->setType($typeName);
         $classField->setIsList($isList);
-        $classField->setIsCollection($isCollection);
+        $classField->setIsTypedCollection($isCollection);
         if ($isNested && is_subclass_of($typeName, YamlConfigurable::class)) {
             if ($typeName === $reflectionProperty->class) {
                 //prevent loop on nested elements of the same type

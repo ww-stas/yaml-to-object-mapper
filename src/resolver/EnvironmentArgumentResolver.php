@@ -2,11 +2,11 @@
 
 namespace Diezz\YamlToObjectMapper\Resolver;
 
-class EnvironmentArgumentResolver extends ArgumentResolver
+class EnvironmentArgumentResolver extends CustomArgumentResolver
 {
     protected function doResolve($context = null)
     {
-        return getenv($this->method);
+        return getenv($this->rawValue);
     }
 
     public function getName(): string
