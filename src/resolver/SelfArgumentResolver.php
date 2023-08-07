@@ -13,10 +13,10 @@ class SelfArgumentResolver extends ArgumentResolver
         $config = $context->getConfig();
         $argumentResolverFactory = new ArgumentResolverFactory();
 
-        if (is_array($this->method)) {
-            $path = $this->method;
+        if (is_array($this->rawValue)) {
+            $path = $this->rawValue;
         } else {
-            $path = explode(".", $this->method);
+            $path = explode(".", $this->rawValue);
         }
         $pathRep = implode('.', $path);
 

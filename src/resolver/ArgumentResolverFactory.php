@@ -7,16 +7,14 @@ use RuntimeException;
 
 class ArgumentResolverFactory
 {
-    public const ARRAY_NOTATION = '/\[((.+),?)+]/';
-
     private ?string $resolversNamespace = null;
 
     private array $registeredResolvers = [
-        'format'    => FormatArgumentResolver::class,
-        'substring' => SubstringArgumentResolver::class,
-        'now'       => NowArgumentResolver::class,
-        'self'      => SelfArgumentResolver::class,
-        'env'       => EnvironmentArgumentResolver::class,
+        'format'     => FormatArgumentResolver::class,
+        'substring'  => SubstringArgumentResolver::class,
+        'now'        => NowArgumentResolver::class,
+        'self'       => SelfArgumentResolver::class,
+        'env'        => EnvironmentArgumentResolver::class,
     ];
 
     public function addResolver(ClassString $resolver): void

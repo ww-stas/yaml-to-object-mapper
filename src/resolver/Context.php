@@ -9,6 +9,7 @@ class Context
     public function __construct(
         private array     $config,
         private ClassInfo $classInfo,
+        private array $preMap,
     )
     {
     }
@@ -19,6 +20,14 @@ class Context
     public function getConfig(): array
     {
         return $this->config;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPreMap(): array
+    {
+        return $this->preMap;
     }
 
     /**
