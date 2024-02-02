@@ -1,0 +1,4 @@
+name: Test self argument resolver with circular references
+one: ${self:two}
+two: ${self:three}
+three: ${self:one}

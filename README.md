@@ -48,8 +48,8 @@ name: Test env variables
 connection:
   host: localhost
   port: 3202
-  username: $env::DB_USER
-  password: $env::DB_PASSWORD
+  username: ${env:DB_USER}
+  password: ${env:DB_PASSWORD}
 ```
 **Note:** if env variable can't be resolved the argument resolver will return `null`. 
 In that case make sure you class field allowed null values or either exception would be thrown

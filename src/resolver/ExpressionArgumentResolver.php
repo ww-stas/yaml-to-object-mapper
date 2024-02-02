@@ -12,7 +12,7 @@ class ExpressionArgumentResolver extends CustomArgumentResolver
      */
     protected function doResolve($context = null)
     {
-        return (new Parser($this->rawValue))->parse()->run($context);
+        return (new Parser($this->rawValue))->parse()->toResolver($context);
     }
 
     public function getName(): string

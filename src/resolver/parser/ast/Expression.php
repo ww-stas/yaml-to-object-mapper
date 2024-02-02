@@ -2,6 +2,8 @@
 
 namespace Diezz\YamlToObjectMapper\Resolver\Parser\AST;
 
+use Diezz\YamlToObjectMapper\Resolver\ArgumentResolver;
+use Diezz\YamlToObjectMapper\Resolver\ConcatArgumentResolver;
 use JetBrains\PhpStorm\ArrayShape;
 
 class Expression extends ASTNode
@@ -43,17 +45,20 @@ class Expression extends ASTNode
         ];
     }
 
-    public function run(mixed $context): mixed
+    public function toResolver(): ArgumentResolver
     {
-        $result = [];
+        if (count($this->body) === 1) {
+            return $this->body[0]->toResolver();
+        }
+
+        $arguments = [];
 
         foreach ($this->body as $node) {
-            $result[] = $node->run($context);
+            $arguments[] = $node->toResolver();
         }
 
         //Just for now return a string
-        return implode('', $result);
+        //return implode('', $arguments);
+        return new ConcatArgumentResolver($arguments);
     }
-
-
 }

@@ -3,10 +3,11 @@
 namespace Diezz\YamlToObjectMapper;
 
 use Diezz\YamlToObjectMapper\Attributes\DefaultValueResolver;
+use Diezz\YamlToObjectMapper\Resolver\ArgumentResolver;
 use Diezz\YamlToObjectMapper\Resolver\Context;
-use Diezz\YamlToObjectMapper\Resolver\ExpressionArgumentResolver;
 use Diezz\YamlToObjectMapper\Resolver\InstanceArgumentResolver;
 use Diezz\YamlToObjectMapper\Resolver\ListArgumentResolver;
+use Diezz\YamlToObjectMapper\Resolver\Parser\Parser;
 use Diezz\YamlToObjectMapper\Resolver\ScalarArgumentResolver;
 use JetBrains\PhpStorm\Pure;
 use ReflectionException;
@@ -64,6 +65,9 @@ class ConfigMapper
         $rootResolver = new InstanceArgumentResolver($preMap);
         $rootResolver->setClassInfo($classInfo);
 
+        //init all resolvers
+        $rootResolver->init();
+
         return $rootResolver->resolve(new Context($config, $rootResolver));
     }
 
@@ -120,7 +124,7 @@ class ConfigMapper
                 if (is_bool($rawValue) || is_int($rawValue) || is_array($rawValue)) {
                     $argResolver = new ScalarArgumentResolver($rawValue);
                 } else {
-                    $argResolver = new ExpressionArgumentResolver($rawValue);
+                    $argResolver = $this->processExpression($rawValue);
                 }
             } else if ($field->isList()) {
                 $value = [];
@@ -149,6 +153,16 @@ class ConfigMapper
     /**
      * @throws Resolver\Parser\SyntaxException
      */
+    private function processExpression(string $expression): ArgumentResolver
+    {
+        $parser = new Parser($expression);
+
+        return $parser->parse()->toResolver();
+    }
+
+    /**
+     * @throws Resolver\Parser\SyntaxException
+     */
     private function doMapArray(array $array): array
     {
         $result = [];
@@ -156,7 +170,7 @@ class ConfigMapper
             if (is_array($value)) {
                 $result[$key] = $this->doMapArray($value);
             } else {
-                $result[$key] = new ExpressionArgumentResolver($value);
+                $result[$key] = $this->processExpression($value);
             }
         }
 

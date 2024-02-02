@@ -2,6 +2,8 @@
 
 namespace Diezz\YamlToObjectMapper\Resolver\Parser\AST;
 
+use Diezz\YamlToObjectMapper\Resolver\ArgumentResolver;
+use Diezz\YamlToObjectMapper\Resolver\ScalarArgumentResolver;
 use JetBrains\PhpStorm\ArrayShape;
 
 class StringLiteral extends ASTNode
@@ -31,8 +33,8 @@ class StringLiteral extends ASTNode
         ];
     }
 
-    public function run(mixed $context): mixed
+    public function toResolver(): ArgumentResolver
     {
-        return $this->getValue();
+        return new ScalarArgumentResolver($this->getValue());
     }
 }

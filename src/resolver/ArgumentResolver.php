@@ -21,6 +21,10 @@ abstract class ArgumentResolver
         $this->argument = $argument;
     }
 
+    public function init(): void
+    {
+    }
+
     /**
      * @param ArgumentResolver|null $after
      *
@@ -46,6 +50,7 @@ abstract class ArgumentResolver
 
         $this->resolvedValue = $result;
         $this->isResolved = true;
+
         return $result;
     }
 

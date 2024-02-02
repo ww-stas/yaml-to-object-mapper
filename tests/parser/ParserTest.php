@@ -506,12 +506,8 @@ class ParserTest extends TestCase
                     'provider'  => 'self',
                     'arguments' => [
                         [
-                            'type' => 'PathArgument',
-                            'path' => [
-                                'path',
-                                '1',
-                                'name',
-                            ],
+                            'type'  => 'StringLiteral',
+                            'value' => 'path.1.name',
                         ],
                     ],
                 ],

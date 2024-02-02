@@ -22,7 +22,7 @@ class NowArgumentResolver extends CustomArgumentResolver
     {
         $now = new DateTime();
         if ($this->rawValue !== null) {
-            return $now->format($this->rawValue);
+            return $now->format($this->rawValue->resolve($context));
         }
 
         return $now;

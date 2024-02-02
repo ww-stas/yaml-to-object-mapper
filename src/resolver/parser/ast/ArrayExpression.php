@@ -2,6 +2,8 @@
 
 namespace Diezz\YamlToObjectMapper\Resolver\Parser\AST;
 
+use Diezz\YamlToObjectMapper\Resolver\ArgumentResolver;
+use Diezz\YamlToObjectMapper\Resolver\ListArgumentResolver;
 use JetBrains\PhpStorm\ArrayShape;
 
 class ArrayExpression extends ASTNode
@@ -42,14 +44,14 @@ class ArrayExpression extends ASTNode
         ];
     }
 
-    public function run(mixed $context): mixed
+    public function toResolver(): ArgumentResolver
     {
         $result = [];
 
         foreach ($this->values as $value) {
-            $result[] = $value->run($context);
+            $result[] = $value->toResolver();
         }
 
-        return $result;
+        return new ListArgumentResolver($result);
     }
 }

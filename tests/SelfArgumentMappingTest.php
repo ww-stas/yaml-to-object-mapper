@@ -4,10 +4,12 @@ namespace Test;
 
 use Diezz\YamlToObjectMapper\ConfigMapper;
 use Diezz\YamlToObjectMapper\Resolver\ArgumentResolverException;
+use Diezz\YamlToObjectMapper\Resolver\CircularDependencyException;
 use PHPUnit\Framework\TestCase;
 use Test\Examples\Self03;
 use Test\Examples\Self04;
 use Test\Examples\Self05;
+use Test\Examples\Self12;
 
 /**
  * @covers \Diezz\YamlToObjectMapper\Resolver\SelfArgumentResolver
@@ -60,5 +62,25 @@ class SelfArgumentMappingTest extends TestCase
         //Then
         self::assertEquals($expectedResult, $result->target);
         self::assertEquals($result->date, $result->target);
+    }
+
+    public function testSelfArgumentResolverWithCircularReferences(): void
+    {
+        //Given
+        $file = __DIR__ . '/examples/12-self-circular.yml';
+        $this->expectException(CircularDependencyException::class);
+
+        //When && Then
+        ConfigMapper::make()->mapFromFile(Self12::class, $file);
+    }
+
+    public function testSelfArgumentResolverWithCircularReferences2(): void
+    {
+        //Given
+        $file = __DIR__ . '/examples/13-self-selfRefernce.yml';
+        $this->expectException(CircularDependencyException::class);
+
+        //When && Then
+        ConfigMapper::make()->mapFromFile(Self12::class, $file);
     }
 }

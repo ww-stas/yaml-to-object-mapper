@@ -5,7 +5,6 @@ namespace Diezz\YamlToObjectMapper\Resolver\Parser;
 use Diezz\YamlToObjectMapper\Resolver\Parser\AST\ArrayExpression;
 use Diezz\YamlToObjectMapper\Resolver\Parser\AST\ASTNode;
 use Diezz\YamlToObjectMapper\Resolver\Parser\AST\Expression;
-use Diezz\YamlToObjectMapper\Resolver\Parser\AST\PathArgument;
 use Diezz\YamlToObjectMapper\Resolver\Parser\AST\ResolverExpression;
 use Diezz\YamlToObjectMapper\Resolver\Parser\AST\StringLiteral;
 
@@ -187,19 +186,18 @@ class Parser
     /**
      * @throws SyntaxException
      */
-    private function pathArgument(Token $token): PathArgument
+    private function pathArgument(Token $token): ASTNode
     {
-        $pathArgument = new PathArgument();
-        $pathArgument->addPathItem($token->getValue());
+        $pathArgument = $token->getValue();
 
         $stop = [Tokenizer::T_ARRAY_END, Tokenizer::T_END_OF_EXPRESSION, Tokenizer::T_COMMA];
         do {
             $this->eat(Tokenizer::T_DOT);
             $token = $this->eat(Tokenizer::T_STRING_LITERAL);
-            $pathArgument->addPathItem($token->getValue());
+            $pathArgument .= '.' . $token->getValue();
         } while (!in_array($this->lookahead->getTokenType(), $stop, true));
 
-        return $pathArgument;
+        return new StringLiteral($pathArgument);
     }
 
     /**

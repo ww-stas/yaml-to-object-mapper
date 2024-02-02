@@ -10,6 +10,14 @@ class InstanceArgumentResolver extends SystemArgumentResolver
 {
     private ClassInfo $classInfo;
 
+    public function init(): void
+    {
+        foreach ($this->getConfig() as $argumentResolver) {
+            $argumentResolver->init();
+        }
+    }
+
+
     protected function doResolve($context = null)
     {
         $className = $this->classInfo->getClassName();
