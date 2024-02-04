@@ -31,9 +31,8 @@ class ConfigMapper
      * @throws Resolver\Parser\SyntaxException
      * @return T
      *
-     * @todo     get rid of Reflection exception
      */
-    public function mapFromFile(string $targetClass, string $configFile): YamlConfigurable
+    public function mapFromFile(string $targetClass, string $configFile): object
     {
         $config = Yaml::parseFile($configFile);
 
@@ -50,7 +49,7 @@ class ConfigMapper
      *
      * @return T
      */
-    public function map(string $targetClass, array $config): YamlConfigurable
+    public function map(string $targetClass, array $config): object
     {
         $instance = new $targetClass;
         $classInfoReflector = new ClassInfoReflector();
@@ -81,7 +80,7 @@ class ConfigMapper
      *
      * @return T
      */
-    public function mapFromString(string $targetClass, string $yaml): YamlConfigurable
+    public function mapFromString(string $targetClass, string $yaml): object
     {
         $config = Yaml::parse($yaml);
 

@@ -2,10 +2,8 @@
 
 namespace Test;
 
-use Diezz\YamlToObjectMapper\Attributes\Collection;
-use Diezz\YamlToObjectMapper\YamlConfigurable;
 
-class TestScalarsMappingsModel implements YamlConfigurable
+class TestScalarsMappingsModel
 {
     public string $stringValue;
     /**

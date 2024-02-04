@@ -2,9 +2,7 @@
 
 namespace Test\Examples;
 
-use Diezz\YamlToObjectMapper\YamlConfigurable;
-
-class Person implements YamlConfigurable
+class Person
 {
     public string $name;
     public int $age;

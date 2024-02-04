@@ -2,9 +2,7 @@
 
 namespace Test\Examples;
 
-use Diezz\YamlToObjectMapper\YamlConfigurable;
-
-class ListModel01 implements YamlConfigurable
+class ListModel01
 {
     public string $name;
     public array $list;

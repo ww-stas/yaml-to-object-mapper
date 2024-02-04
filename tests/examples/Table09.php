@@ -2,9 +2,7 @@
 
 namespace Test\Examples;
 
-use Diezz\YamlToObjectMapper\YamlConfigurable;
-
-class Table09 implements YamlConfigurable
+class Table09
 {
     public string $name;
     public array $columns;

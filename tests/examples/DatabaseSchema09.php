@@ -3,9 +3,8 @@
 namespace Test\Examples;
 
 use Diezz\YamlToObjectMapper\Attributes\Collection;
-use Diezz\YamlToObjectMapper\YamlConfigurable;
 
-class DatabaseSchema09 implements YamlConfigurable
+class DatabaseSchema09
 {
     /**
      * @var Table09[]

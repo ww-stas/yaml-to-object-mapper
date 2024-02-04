@@ -2,9 +2,7 @@
 
 namespace Test;
 
-use Diezz\YamlToObjectMapper\YamlConfigurable;
-
-class TestNestedModel implements YamlConfigurable
+class TestNestedModel
 {
     /**
      * @var string[]

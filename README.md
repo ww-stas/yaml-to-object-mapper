@@ -1,6 +1,6 @@
 # Yaml to Object Mapper
 
-The mapper allows you to easily map yaml to PHP objects with validation and custom variables processing.
+The mapper allows you to easily map yaml to PHP objects with validation and custom  extendable DSL.
 This mapper works with php 8 attributes which uses for describing mapping or/and validation rules for exact fields 
 
 ## Installation
@@ -18,14 +18,12 @@ connection:
 which we want to be mapped to the object of class:
 
 ```php
-use Diezz\YamlToObjectMapper\YamlConfigurable;
-
-class Config implements YamlConfigurable {
+class Config {
     public string $name;
     public ConnectionSettings $connection
 }
 
-class ConnectionSettings implements YamlConfigurable {
+class ConnectionSettings {
     public string $host;
     public string $port;
     public string $username;
@@ -59,13 +57,12 @@ There are multiple ways how the mapper defines which field is required:
 1. The most obvious way is mark required field with `#[Required]` attribute.
 2. If class field isn't marked with required attribute the mapper checks type hint of the field. It could be a php 7 
 type hint or phpdoc comment. Nullable properties or properties initiated with default value are treated as not required 
-or vice verse. 
+or vice verse.
 
 ```php
 use Diezz\YamlToObjectMapper\Attributes\Required;
-use Diezz\YamlToObjectMapper\YamlConfigurable;
 
-class Model implements YamlConfigurable {
+class Model {
     /**
      * Required field 
      */

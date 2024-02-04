@@ -2,9 +2,7 @@
 
 namespace Test\Config\Model\Example1;
 
-use Diezz\YamlToObjectMapper\YamlConfigurable;
-
-class Config implements YamlConfigurable
+class Config
 {
     private Nested $nested;
     private int $integer;

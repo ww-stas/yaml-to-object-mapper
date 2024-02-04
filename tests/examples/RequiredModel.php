@@ -3,9 +3,8 @@
 namespace Test\Examples;
 
 use Diezz\YamlToObjectMapper\Attributes\Required;
-use Diezz\YamlToObjectMapper\YamlConfigurable;
 
-class RequiredModel implements YamlConfigurable
+class RequiredModel
 {
     /**
      * Required field

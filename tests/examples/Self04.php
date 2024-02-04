@@ -3,9 +3,8 @@
 namespace Test\Examples;
 
 use Diezz\YamlToObjectMapper\Attributes\Collection;
-use Diezz\YamlToObjectMapper\YamlConfigurable;
 
-class Self04 implements YamlConfigurable
+class Self04
 {
     public string $name;
 

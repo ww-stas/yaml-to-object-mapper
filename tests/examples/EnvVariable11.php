@@ -2,9 +2,7 @@
 
 namespace Test\Examples;
 
-use Diezz\YamlToObjectMapper\YamlConfigurable;
-
-class EnvVariable11 implements YamlConfigurable
+class EnvVariable11
 {
     public string $name;
     public string $target;

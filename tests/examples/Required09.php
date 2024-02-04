@@ -2,9 +2,7 @@
 
 namespace Test\Examples;
 
-use Diezz\YamlToObjectMapper\YamlConfigurable;
-
-class Required09 implements YamlConfigurable
+class Required09
 {
     public string $name;
     public ?string $target = null;

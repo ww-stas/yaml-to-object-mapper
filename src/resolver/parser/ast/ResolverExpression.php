@@ -3,6 +3,7 @@
 namespace Diezz\YamlToObjectMapper\Resolver\Parser\AST;
 
 use Diezz\YamlToObjectMapper\Resolver\ArgumentResolver;
+use Diezz\YamlToObjectMapper\Resolver\ArgumentResolverException;
 use Diezz\YamlToObjectMapper\Resolver\ArgumentResolverFactory;
 use JetBrains\PhpStorm\ArrayShape;
 
@@ -52,6 +53,9 @@ class ResolverExpression extends ASTNode
         ];
     }
 
+    /**
+     * @throws ArgumentResolverException
+     */
     public function toResolver(): ArgumentResolver
     {
         $argumentResolverFactory = new ArgumentResolverFactory();
@@ -60,9 +64,8 @@ class ResolverExpression extends ASTNode
         foreach ($this->arguments as $argument) {
             $arguments[] = $argument->toResolver();
         }
-        $argumentResolver = $argumentResolverFactory->create($this->getProvider(), $arguments);
 
         //return $argumentResolver->resolve($context);
-        return $argumentResolver;
+        return $argumentResolverFactory->create($this->getProvider(), $arguments);
     }
 }

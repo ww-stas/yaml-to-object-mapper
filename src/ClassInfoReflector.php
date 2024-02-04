@@ -122,7 +122,7 @@ class ClassInfoReflector
         $isList = false;
         $isCollection = false;
         if (!$type->isBuiltin()) {
-            $isNested = is_subclass_of($type->getName(), YamlConfigurable::class);
+            $isNested = true;
         } else if ('array' === $type->getName()) {
             $attributes = $reflectionProperty->getAttributes(Collection::class);
             $isList = true;
@@ -138,7 +138,7 @@ class ClassInfoReflector
         $classField->setType($typeName);
         $classField->setIsList($isList);
         $classField->setIsTypedCollection($isCollection);
-        if ($isNested && is_subclass_of($typeName, YamlConfigurable::class)) {
+        if ($isNested) {
             if ($typeName === $reflectionProperty->class) {
                 //prevent loop on nested elements of the same type
                 return;
@@ -201,7 +201,7 @@ class ClassInfoReflector
     private function findUnresolved(ClassInfo $classInfo, array $map): void
     {
         foreach ($classInfo->getFields() as $field) {
-            if ($field->getClassInfo() === null && is_subclass_of($field->getType(), YamlConfigurable::class)) {
+            if ($field->getClassInfo() === null) {
 
                 if (!array_key_exists($field->getType(), $map)) {
                     continue;

@@ -2,9 +2,7 @@
 
 namespace Test\Examples;
 
-use Diezz\YamlToObjectMapper\YamlConfigurable;
-
-class Self03 implements YamlConfigurable
+class Self03
 {
     public string $name;
     public string $target;

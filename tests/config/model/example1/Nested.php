@@ -3,9 +3,8 @@
 namespace Test\Config\Model\Example1;
 
 use Diezz\YamlToObjectMapper\Attributes\Required;
-use Diezz\YamlToObjectMapper\YamlConfigurable;
 
-class Nested implements YamlConfigurable
+class Nested
 {
     #[Required]
     private string $field;
