@@ -3,12 +3,10 @@
 namespace Test\CustomVar\Now;
 
 use Diezz\YamlToObjectMapper\Attributes\Required;
-use Diezz\YamlToObjectMapper\Attributes\ResolverType;
 
 class Test01TargetClass
 {
     #[Required]
-    #[ResolverType(ResolverType::EAGER)]
     private string $value;
 
     public function getValue(): string

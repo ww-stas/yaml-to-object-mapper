@@ -2,7 +2,6 @@
 
 namespace Test\ClassInfo;
 
-use Diezz\YamlToObjectMapper\Attributes\ResolverType;
 use Diezz\YamlToObjectMapper\ClassInfoReflector;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
@@ -51,7 +50,6 @@ class ClassInfoReflectorTest extends TestCase
         self::assertFalse($value->isPublic());
         self::assertTrue($value->isPrimitive());
         self::assertFalse($value->isList());
-        self::assertEquals(ResolverType::EAGER, $value->getArgumentResolverType());
     }
 
     public function testReflectionOfTypedCollection(): void
