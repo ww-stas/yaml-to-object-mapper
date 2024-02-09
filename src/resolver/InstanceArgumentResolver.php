@@ -4,25 +4,26 @@ namespace Diezz\YamlToObjectMapper\Resolver;
 
 use Diezz\YamlToObjectMapper\ClassField;
 use Diezz\YamlToObjectMapper\ClassInfo;
-use JetBrains\PhpStorm\ArrayShape;
 
 class InstanceArgumentResolver extends SystemArgumentResolver
 {
     private ClassInfo $classInfo;
+    private array $config;
 
-    public function init(): void
+    /**
+     * @param ClassInfo $classInfo
+     */
+    public function __construct(ClassInfo $classInfo, array $config)
     {
-        foreach ($this->getConfig() as $argumentResolver) {
-            $argumentResolver->init();
-        }
+        $this->classInfo = $classInfo;
+        $this->config = $config;
     }
-
 
     protected function doResolve($context = null)
     {
         $className = $this->classInfo->getClassName();
         $instance = new $className;
-        foreach ($this->getConfig() as $fieldName => $argumentResolver) {
+        foreach ($this->config as $fieldName => $argumentResolver) {
             $classField = $this->classInfo->getClassField($fieldName);
             assert($classField !== null);
             $value = $argumentResolver->resolve($context);
@@ -32,13 +33,13 @@ class InstanceArgumentResolver extends SystemArgumentResolver
         return $instance;
     }
 
-    /**
-     * @param ClassInfo $classInfo
-     */
-    public function setClassInfo(ClassInfo $classInfo): void
-    {
-        $this->classInfo = $classInfo;
-    }
+//    /**
+//     * @param ClassInfo $classInfo
+//     */
+//    public function setClassInfo(ClassInfo $classInfo): void
+//    {
+//        $this->classInfo = $classInfo;
+//    }
 
     private function setValue(ClassField $field, $value, $resultInstance): void
     {
@@ -53,14 +54,14 @@ class InstanceArgumentResolver extends SystemArgumentResolver
         }
     }
 
-    #[ArrayShape(['field' => ArgumentResolver::class])]
-    private function getConfig(): array
-    {
-        return $this->rawValue;
-    }
+//    #[ArrayShape(['field' => ArgumentResolver::class])]
+//    private function getConfig(): array
+//    {
+//        return $this->rawValue;
+//    }
 
     public function findByPath(string $path): ?ArgumentResolver
     {
-        return $this->getConfig()[$path] ?? null;
+        return $this->config[$path] ?? null;
     }
 }

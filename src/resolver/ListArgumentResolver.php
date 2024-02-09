@@ -4,10 +4,23 @@ namespace Diezz\YamlToObjectMapper\Resolver;
 
 class ListArgumentResolver extends SystemArgumentResolver
 {
-    protected function doResolve($context = null)
+    /**
+     * @var ArgumentResolver[]
+     */
+    private array $elements;
+
+    /**
+     * @param ArgumentResolver[] $elements
+     */
+    public function __construct(array $elements)
+    {
+        $this->elements = $elements;
+    }
+
+    protected function doResolve($context = null): array
     {
         $result = [];
-        foreach ($this->rawValue as $key => $item) {
+        foreach ($this->elements as $key => $item) {
             $result[$key] = $item->resolve($context);
         }
 
@@ -16,6 +29,6 @@ class ListArgumentResolver extends SystemArgumentResolver
 
     public function findByPath(string $path): ?ArgumentResolver
     {
-        return $this->rawValue[$path] ?? null;
+        return $this->elements[$path] ?? null;
     }
 }

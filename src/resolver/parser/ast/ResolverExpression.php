@@ -56,16 +56,13 @@ class ResolverExpression extends ASTNode
     /**
      * @throws ArgumentResolverException
      */
-    public function toResolver(): ArgumentResolver
+    public function toResolver(ArgumentResolverFactory $argumentResolverFactory): ArgumentResolver
     {
-        $argumentResolverFactory = new ArgumentResolverFactory();
-
         $arguments = [];
         foreach ($this->arguments as $argument) {
-            $arguments[] = $argument->toResolver();
+            $arguments[] = $argument->toResolver($argumentResolverFactory);
         }
 
-        //return $argumentResolver->resolve($context);
         return $argumentResolverFactory->create($this->getProvider(), $arguments);
     }
 }

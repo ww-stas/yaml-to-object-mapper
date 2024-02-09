@@ -3,6 +3,7 @@
 namespace Diezz\YamlToObjectMapper\Resolver\Parser\AST;
 
 use Diezz\YamlToObjectMapper\Resolver\ArgumentResolver;
+use Diezz\YamlToObjectMapper\Resolver\ArgumentResolverFactory;
 use Diezz\YamlToObjectMapper\Resolver\ListArgumentResolver;
 use JetBrains\PhpStorm\ArrayShape;
 
@@ -44,12 +45,12 @@ class ArrayExpression extends ASTNode
         ];
     }
 
-    public function toResolver(): ArgumentResolver
+    public function toResolver(ArgumentResolverFactory $argumentResolverFactory): ArgumentResolver
     {
         $result = [];
 
         foreach ($this->values as $value) {
-            $result[] = $value->toResolver();
+            $result[] = $value->toResolver($argumentResolverFactory);
         }
 
         return new ListArgumentResolver($result);

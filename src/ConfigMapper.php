@@ -4,20 +4,43 @@ namespace Diezz\YamlToObjectMapper;
 
 use Diezz\YamlToObjectMapper\Attributes\DefaultValueResolver;
 use Diezz\YamlToObjectMapper\Resolver\ArgumentResolver;
+use Diezz\YamlToObjectMapper\Resolver\ArgumentResolverFactory;
 use Diezz\YamlToObjectMapper\Resolver\Context;
 use Diezz\YamlToObjectMapper\Resolver\InstanceArgumentResolver;
 use Diezz\YamlToObjectMapper\Resolver\ListArgumentResolver;
 use Diezz\YamlToObjectMapper\Resolver\Parser\Parser;
 use Diezz\YamlToObjectMapper\Resolver\ScalarArgumentResolver;
-use JetBrains\PhpStorm\Pure;
 use ReflectionException;
 use Symfony\Component\Yaml\Yaml;
 
 class ConfigMapper
 {
-    #[Pure] public static function make(): static
+    private ArgumentResolverFactory $argumentResolverFactory;
+
+    public function __construct(ArgumentResolverFactory $argumentResolverFactory = null)
+    {
+        if (null === $argumentResolverFactory) {
+            $argumentResolverFactory = new ArgumentResolverFactory();
+        }
+        $this->argumentResolverFactory = $argumentResolverFactory;
+    }
+
+    public static function make(): static
     {
         return new static();
+    }
+
+    /**
+     * Register new custom argument resolver.
+     *
+     * @param string $resolverAlias     - resolver name
+     * @param string $resolverClassName - class name of argument resolver
+     *
+     * @return void
+     */
+    public function registerCustomArgumentResolver(string $resolverAlias, string $resolverClassName): void
+    {
+        $this->argumentResolverFactory->addResolver($resolverAlias, $resolverClassName);
     }
 
     /**
@@ -61,11 +84,7 @@ class ConfigMapper
         }
 
         $preMap = $this->getMappingConfig($classInfo, $config, $instance);
-        $rootResolver = new InstanceArgumentResolver($preMap);
-        $rootResolver->setClassInfo($classInfo);
-
-        //init all resolvers
-        $rootResolver->init();
+        $rootResolver = new InstanceArgumentResolver($classInfo, $preMap);
 
         return $rootResolver->resolve(new Context($config, $rootResolver));
     }
@@ -129,9 +148,7 @@ class ConfigMapper
                 $value = [];
                 if ($field->isTypedCollection()) {
                     foreach ($rawValue as $key => $item) {
-                        $resolver = new InstanceArgumentResolver($this->getMappingConfig($field->getClassInfo(), $item, $key));
-                        $resolver->setClassInfo($field->getClassInfo());
-                        $value[] = $resolver;
+                        $value[] = new InstanceArgumentResolver($field->getClassInfo(), $this->getMappingConfig($field->getClassInfo(), $item, $key));
                     }
                 } else {
                     $value = $this->doMapArray($rawValue);
@@ -139,8 +156,7 @@ class ConfigMapper
 
                 $argResolver = new ListArgumentResolver($value);
             } else {
-                $argResolver = new InstanceArgumentResolver($this->getMappingConfig($field->getClassInfo(), $rawValue, $field->newInstance()));
-                $argResolver->setClassInfo($field->getClassInfo());
+                $argResolver = new InstanceArgumentResolver($field->getClassInfo(), $this->getMappingConfig($field->getClassInfo(), $rawValue, $field->newInstance()));
             }
 
             $mappingConfig[$fieldName] = $argResolver;
@@ -156,7 +172,7 @@ class ConfigMapper
     {
         $parser = new Parser($expression);
 
-        return $parser->parse()->toResolver();
+        return $parser->parse()->toResolver($this->argumentResolverFactory);
     }
 
     /**
@@ -168,8 +184,10 @@ class ConfigMapper
         foreach ($array as $key => $value) {
             if (is_array($value)) {
                 $result[$key] = $this->doMapArray($value);
-            } else {
+            } else if (is_string($value)) {
                 $result[$key] = $this->processExpression($value);
+            } else {
+                $result[$key] = new ScalarArgumentResolver($value);
             }
         }
 

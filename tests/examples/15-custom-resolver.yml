@@ -1,0 +1,6 @@
+name: Testing of CustomArgumentResolver
+value: ${foo:bar}
+price:
+  item1: 100
+  item2: 200
+total: ${sum:${self:price.item1}:${self:price.item2}}

@@ -4,26 +4,9 @@ namespace Diezz\YamlToObjectMapper\Resolver;
 
 abstract class ArgumentResolver
 {
-    protected mixed $rawValue;
-    protected mixed $argument;
-
     protected bool $isResolved = false;
     protected mixed $resolvedValue = null;
     protected ?ArgumentResolver $after = null;
-
-    /**
-     * @param string     $rawValue
-     * @param mixed|null $argument
-     */
-    public function __construct(mixed $rawValue, mixed $argument = null)
-    {
-        $this->rawValue = $rawValue;
-        $this->argument = $argument;
-    }
-
-    public function init(): void
-    {
-    }
 
     /**
      * @param ArgumentResolver|null $after
@@ -52,19 +35,6 @@ abstract class ArgumentResolver
         $this->isResolved = true;
 
         return $result;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRawValue(): mixed
-    {
-        return $this->rawValue;
-    }
-
-    public function getArgument(): mixed
-    {
-        return $this->argument;
     }
 
     /**

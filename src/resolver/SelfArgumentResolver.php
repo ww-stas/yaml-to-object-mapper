@@ -2,18 +2,23 @@
 
 namespace Diezz\YamlToObjectMapper\Resolver;
 
-use RuntimeException;
-
 class SelfArgumentResolver extends CustomArgumentResolver
 {
-    private static array $visited = [];
+    private ScalarArgumentResolver $path;
+    private array $visited = [];
 
-    public function init(): void
+    /**
+     * @param ScalarArgumentResolver $path
+     */
+    public function __construct(ScalarArgumentResolver $path)
     {
-        parent::init();
-        self::$visited = [];
+        $this->path = $path;
     }
 
+    public function setVisited(array $visited): void
+    {
+        $this->visited = $visited;
+    }
 
     /**
      * @throws ArgumentResolverException
@@ -30,10 +35,13 @@ class SelfArgumentResolver extends CustomArgumentResolver
             if ($resolver instanceof SystemArgumentResolver) {
                 $result = $resolver;
             } else if ($resolver instanceof CustomArgumentResolver) {
-                if (in_array($item, self::$visited, true)) {
-                    throw new CircularDependencyException(self::$visited);
+                if ($resolver instanceof self) {
+                    if (in_array($item, $this->visited, true)) {
+                        throw new CircularDependencyException($this->visited);
+                    }
+                    $this->visited[] = $item;
+                    $resolver->setVisited($this->visited);
                 }
-                self::$visited[] = $item;
                 $result = $resolver->resolve($context);
             } else {
                 throw new ArgumentResolverException("Path '$pathRep' couldn't be resolved");
@@ -45,15 +53,6 @@ class SelfArgumentResolver extends CustomArgumentResolver
 
     private function getPath($context): array
     {
-        if (!($this->rawValue instanceof ScalarArgumentResolver)) {
-            throw new RuntimeException("Wrong initialization of SelfArgumentResolver");
-        }
-
-        return explode(".", $this->rawValue->resolve($context));
-    }
-
-    public function getName(): string
-    {
-        return 'self';
+        return explode(".", $this->path->resolve($context));
     }
 }

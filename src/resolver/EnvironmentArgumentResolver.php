@@ -4,17 +4,18 @@ namespace Diezz\YamlToObjectMapper\Resolver;
 
 class EnvironmentArgumentResolver extends CustomArgumentResolver
 {
-    protected function doResolve($context = null)
-    {
-        $variableName = $this->rawValue instanceof ArgumentResolver
-            ? $this->rawValue->resolve($context)
-            : $this->rawValue;
+    private ScalarArgumentResolver $envVariableName;
 
-        return getenv($variableName);
+    /**
+     * @param ScalarArgumentResolver $envVariableName
+     */
+    public function __construct(ScalarArgumentResolver $envVariableName)
+    {
+        $this->envVariableName = $envVariableName;
     }
 
-    public function getName(): string
+    protected function doResolve($context = null): bool|array|string
     {
-        return 'env';
+        return getenv($this->envVariableName->resolve($context));
     }
 }

@@ -3,6 +3,7 @@
 namespace Diezz\YamlToObjectMapper\Resolver\Parser\AST;
 
 use Diezz\YamlToObjectMapper\Resolver\ArgumentResolver;
+use Diezz\YamlToObjectMapper\Resolver\ArgumentResolverFactory;
 
 abstract class ASTNode
 {
@@ -12,5 +13,5 @@ abstract class ASTNode
 
     abstract public function toArray(): array;
 
-    abstract public function toResolver(): ArgumentResolver;
+    abstract public function toResolver(ArgumentResolverFactory $argumentResolverFactory): ArgumentResolver;
 }

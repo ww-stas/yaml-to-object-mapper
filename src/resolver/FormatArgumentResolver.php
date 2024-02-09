@@ -4,23 +4,27 @@ namespace Diezz\YamlToObjectMapper\Resolver;
 
 class FormatArgumentResolver extends CustomArgumentResolver
 {
+    private ArgumentResolver $value;
+    private ArgumentResolver $format;
+
+    /**
+     * @param ArgumentResolver $value
+     * @param ArgumentResolver $format
+     */
+    public function __construct(ArgumentResolver $value, ArgumentResolver $format)
+    {
+        $this->value = $value;
+        $this->format = $format;
+    }
+
+
     protected function doResolve($context = null)
     {
-        $value = $this->rawValue;
-        if ($value instanceof ArgumentResolver) {
-            $value = $value->resolve($context);
-        }
-
-        return $value->format($this->getFormat($context));
+        return $this->value->resolve($context)->format($this->getFormat($context));
     }
 
     private function getFormat($context): string
     {
-        return $this->argument->resolve($context);
-    }
-
-    public function getName(): string
-    {
-        return 'format';
+        return $this->format->resolve($context);
     }
 }

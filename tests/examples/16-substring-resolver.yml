@@ -1,0 +1,3 @@
+name: Testing of SubstringArgumentResolver
+value: ${substring:${self:name}:7}
+anotherValue: ${substring:${self:name}:11:25}

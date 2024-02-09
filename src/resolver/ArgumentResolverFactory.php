@@ -7,23 +7,24 @@ use RuntimeException;
 
 class ArgumentResolverFactory
 {
-    private ?string $resolversNamespace = null;
-
     private array $registeredResolvers = [
-        'format'     => FormatArgumentResolver::class,
-        'substring'  => SubstringArgumentResolver::class,
-        'now'        => NowArgumentResolver::class,
-        'self'       => SelfArgumentResolver::class,
-        'env'        => EnvironmentArgumentResolver::class,
+        'format'    => FormatArgumentResolver::class,
+        'substring' => SubstringArgumentResolver::class,
+        'now'       => NowArgumentResolver::class,
+        'self'      => SelfArgumentResolver::class,
+        'env'       => EnvironmentArgumentResolver::class,
     ];
 
-    public function addResolver(ClassString $resolver): void
+    public function addResolver(string $resolverAlias, string $resolverClassName): void
     {
-        $instance = new $resolver;
-        if (!$instance instanceof ArgumentResolver) {
+        $interfaces = class_implements($resolverClassName);
+        if ($interfaces && in_array(CustomArgumentResolver::class, $interfaces, true)) {
             throw new RuntimeException('Resolver must be an instance of ArgumentResolver class');
         }
-        $this->registeredResolvers[$instance->getName()] = $resolver;
+        if (array_key_exists($resolverAlias, $this->registeredResolvers)) {
+            throw new RuntimeException("Resolver with name $resolverAlias has already registered");
+        }
+        $this->registeredResolvers[$resolverAlias] = $resolverClassName;
     }
 
     /**

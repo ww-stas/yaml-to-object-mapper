@@ -13,9 +13,4 @@ class ConcatArgumentResolver extends CustomArgumentResolver
 
         return $output;
     }
-
-    public function getName(): string
-    {
-        return 'concat';
-    }
 }

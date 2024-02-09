@@ -4,13 +4,33 @@ namespace Diezz\YamlToObjectMapper\Resolver;
 
 class SubstringArgumentResolver extends CustomArgumentResolver
 {
-    protected function doResolve($context = null): string
+    private ArgumentResolver $string;
+    private ArgumentResolver $offset;
+    private ?ArgumentResolver $length;
+
+    /**
+     * @param ScalarArgumentResolver $string
+     * @param ScalarArgumentResolver $offset
+     */
+    public function __construct(ArgumentResolver $string, ArgumentResolver $offset, ?ArgumentResolver $length = null)
     {
-        return substr($context, (int)$this->rawValue);
+        $this->string = $string;
+        $this->offset = $offset;
+        $this->length = $length;
     }
 
-    public function getName(): string
+    protected function doResolve($context = null): string
     {
-        return 'substring';
+        $string = (string)$this->string->resolve($context);
+        $lengthOrOffset = (int)$this->offset->resolve($context);
+        if ($this->length === null) {
+            $offset = 0;
+            $length = $lengthOrOffset;
+        } else {
+            $offset = $lengthOrOffset;
+            $length = (int)$this->length->resolve($context);
+        }
+
+        return substr($string, $offset, $length);
     }
 }

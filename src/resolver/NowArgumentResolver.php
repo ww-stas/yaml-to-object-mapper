@@ -13,16 +13,21 @@ use DateTime;
  */
 class NowArgumentResolver extends CustomArgumentResolver
 {
-    public function getName(): string
+    private ?ScalarArgumentResolver $format;
+
+    /**
+     * @param ScalarArgumentResolver|null $format
+     */
+    public function __construct(?ScalarArgumentResolver $format)
     {
-        return 'now';
+        $this->format = $format;
     }
 
     protected function doResolve($context = null): mixed
     {
         $now = new DateTime();
-        if ($this->rawValue !== null) {
-            return $now->format($this->rawValue->resolve($context));
+        if ($this->format !== null) {
+            return $now->format($this->format->resolve($context));
         }
 
         return $now;

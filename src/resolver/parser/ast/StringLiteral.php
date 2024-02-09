@@ -3,6 +3,7 @@
 namespace Diezz\YamlToObjectMapper\Resolver\Parser\AST;
 
 use Diezz\YamlToObjectMapper\Resolver\ArgumentResolver;
+use Diezz\YamlToObjectMapper\Resolver\ArgumentResolverFactory;
 use Diezz\YamlToObjectMapper\Resolver\ScalarArgumentResolver;
 use JetBrains\PhpStorm\ArrayShape;
 
@@ -33,7 +34,7 @@ class StringLiteral extends ASTNode
         ];
     }
 
-    public function toResolver(): ArgumentResolver
+    public function toResolver(ArgumentResolverFactory $argumentResolverFactory): ArgumentResolver
     {
         return new ScalarArgumentResolver($this->getValue());
     }
