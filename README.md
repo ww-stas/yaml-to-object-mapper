@@ -1,3 +1,5 @@
+[Packagist](https://img.shields.io/packagist/dt/diezz/yaml-to-object-mapper)](https://packagist.org/packages/diezz/yaml-to-object-mapper)
+
 # Yaml to Object Mapper
 
 The mapper allows you to easily map yaml to PHP objects with validation and custom  extendable DSL.
