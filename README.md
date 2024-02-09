@@ -1,4 +1,4 @@
-[Packagist](https://img.shields.io/packagist/dt/diezz/yaml-to-object-mapper)](https://packagist.org/packages/diezz/yaml-to-object-mapper)
+[![PHP from Packagist](https://img.shields.io/packagist/php-v/diezz/yaml-to-object-mapper)](https://packagist.org/packages/diezz/yaml-to-object-mapper) [![Packagist](https://img.shields.io/packagist/dt/diezz/yaml-to-object-mapper)](https://packagist.org/packages/diezz/yaml-to-object-mapper)
 
 # Yaml to Object Mapper
 
