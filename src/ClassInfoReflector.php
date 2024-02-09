@@ -4,8 +4,8 @@ namespace Diezz\YamlToObjectMapper;
 
 use Diezz\YamlToObjectMapper\Attributes\Collection;
 use Diezz\YamlToObjectMapper\Attributes\DefaultValueResolver;
+use Diezz\YamlToObjectMapper\Attributes\IgnoreUnknown;
 use Diezz\YamlToObjectMapper\Attributes\Required;
-use Diezz\YamlToObjectMapper\Attributes\ResolverType;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionProperty;
@@ -22,6 +22,7 @@ class ClassInfoReflector
 
         $reflection = new ReflectionClass($targetClass);
         $properties = $reflection->getProperties();
+        $instance->setIgnoreUnknown($this->isIgnoreUnknown($reflection));
 
         foreach ($properties as $property) {
             $classField = new ClassField();
@@ -31,7 +32,6 @@ class ClassInfoReflector
             $classField->setRequired($this->isRequired($property));
             $classField->setHasDefaultValue($property->hasDefaultValue());
             $classField->setDefaultValueResolver($this->getDefaultValueResolver($property));
-            $classField->setArgumentResolverType($this->getArgumentResolverType($property));
             $this->resolveType($property, $classField);
             $this->resolveSetter($reflection, $property, $classField);
 
@@ -41,6 +41,13 @@ class ClassInfoReflector
         $this->fixCircularReferences($instance);
 
         return $instance;
+    }
+
+    private function isIgnoreUnknown(ReflectionClass $reflectionClass): bool
+    {
+        $attributes = $reflectionClass->getAttributes(IgnoreUnknown::class);
+
+        return !empty($attributes);
     }
 
     private function getDefaultValueResolver(ReflectionProperty $reflectionProperty): ?string
@@ -54,19 +61,6 @@ class ClassInfoReflector
         }
 
         return null;
-    }
-
-    private function getArgumentResolverType(ReflectionProperty $reflectionProperty): int
-    {
-        $attributes = $reflectionProperty->getAttributes(ResolverType::class);
-        if (!empty($attributes)) {
-            /** @var ResolverType $attribute */
-            $attribute = $attributes[0]->newInstance();
-
-            return $attribute->getType();
-        }
-
-        return ResolverType::EAGER;
     }
 
     private function getNestedClassInfos(ClassInfo $classInfo): array

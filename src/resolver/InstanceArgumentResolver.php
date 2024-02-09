@@ -12,6 +12,7 @@ class InstanceArgumentResolver extends SystemArgumentResolver
 
     /**
      * @param ClassInfo $classInfo
+     * @param array     $config
      */
     public function __construct(ClassInfo $classInfo, array $config)
     {
@@ -25,21 +26,15 @@ class InstanceArgumentResolver extends SystemArgumentResolver
         $instance = new $className;
         foreach ($this->config as $fieldName => $argumentResolver) {
             $classField = $this->classInfo->getClassField($fieldName);
-            assert($classField !== null);
+            if ($classField === null) {
+                continue;
+            }
             $value = $argumentResolver->resolve($context);
             $this->setValue($classField, $value, $instance);
         }
 
         return $instance;
     }
-
-//    /**
-//     * @param ClassInfo $classInfo
-//     */
-//    public function setClassInfo(ClassInfo $classInfo): void
-//    {
-//        $this->classInfo = $classInfo;
-//    }
 
     private function setValue(ClassField $field, $value, $resultInstance): void
     {
@@ -53,12 +48,6 @@ class InstanceArgumentResolver extends SystemArgumentResolver
             $resultInstance->{$field->getSetter()}($value);
         }
     }
-
-//    #[ArrayShape(['field' => ArgumentResolver::class])]
-//    private function getConfig(): array
-//    {
-//        return $this->rawValue;
-//    }
 
     public function findByPath(string $path): ?ArgumentResolver
     {

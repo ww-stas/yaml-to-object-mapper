@@ -9,6 +9,18 @@ class ClassInfo
      */
     private array $fields = [];
     private string $className;
+    private bool $ignoreUnknown;
+
+    public function isIgnoreUnknown(): bool
+    {
+        return $this->ignoreUnknown;
+    }
+
+    public function setIgnoreUnknown(bool $ignoreUnknown): void
+    {
+        $this->ignoreUnknown = $ignoreUnknown;
+    }
+
 
     /**
      * @return string

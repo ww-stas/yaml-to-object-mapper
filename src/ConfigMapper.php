@@ -118,10 +118,10 @@ class ConfigMapper
             $config = [];
         }
 
-        foreach ($classInfo->getFields() as $field) {
-            $fieldName = $field->getName();
+        foreach ($config as $fieldName => $rawValue) {
+            $field = $classInfo->getClassField($fieldName);
             //Skip values that doesn't exist in config file but has a default values
-            if (!array_key_exists($fieldName, $config)) {
+            if ($field !== null && !array_key_exists($fieldName, $config)) {
                 if (!$field->hasDefaultValueResolver()) {
                     continue;
                 }
@@ -132,13 +132,17 @@ class ConfigMapper
                     DefaultValueResolver::PARENT_KEY => $parentKey,
                     DefaultValueResolver::NESTED_LIST => $config,
                 };
-            } else {
-                $rawValue = $config[$fieldName];
             }
 
             $argResolver = null;
 
-            if ($field->isPrimitive()) {
+            if ($field === null) {
+                //Not IgnoreUnknown
+                if (!$classInfo->isIgnoreUnknown()) {
+                    throw new InvalidConfigPathException("Invalid path $fieldName on class {$classInfo->getClassName()}. To prevent this behaviour use #[IgnoreUnknown] on a target class");
+                }
+                $argResolver = new ScalarArgumentResolver($rawValue);
+            } else if ($field->isPrimitive()) {
                 if (is_bool($rawValue) || is_int($rawValue) || is_array($rawValue)) {
                     $argResolver = new ScalarArgumentResolver($rawValue);
                 } else {

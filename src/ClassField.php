@@ -3,8 +3,6 @@
 namespace Diezz\YamlToObjectMapper;
 
 use Diezz\YamlToObjectMapper\Attributes\Constructor;
-use Diezz\YamlToObjectMapper\Attributes\ResolverType;
-use Diezz\YamlToObjectMapper\Resolver\ArgumentResolver;
 
 class ClassField
 {
@@ -13,11 +11,13 @@ class ClassField
     private ?string $type = null;
     /**
      * List means that field has an array type
+     *
      * @var bool
      */
     private bool $isList = false;
     /**
      * Whether the list typed explicitly with #[Collection] attribute
+     *
      * @var bool
      */
     private bool $isTypedCollection = false;
@@ -27,15 +27,6 @@ class ClassField
     private string $constructor = Constructor::DEFAULT_EMPTY;
     private bool $hasDefaultValue = false;
     private ?string $defaultValueResolver = null;
-    private int $argumentResolverType = ResolverType::EAGER;
-
-    /**
-     * @return int
-     */
-    public function getArgumentResolverType(): int
-    {
-        return $this->argumentResolverType;
-    }
 
     /**
      * @return bool
