@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 use Test\Examples\DatabaseSchema09;
 use Test\Examples\DatabaseSchema10;
 
-class DefaultValueResolver extends TestCase
+class DefaultValueResolverTest extends TestCase
 {
     public function testMappingTable(): void
     {
