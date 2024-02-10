@@ -2,7 +2,7 @@
 
 namespace Diezz\YamlToObjectMapper\Tests\Config;
 
-use Diezz\YamlToObjectMapper\ConfigMapper;
+use Diezz\YamlToObjectMapper\Mapper;
 use Diezz\YamlToObjectMapper\ValidationException;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
@@ -23,7 +23,7 @@ class TestConfig extends TestCase
         $t->setNested((new Nested())->setField("value"));
 
         /** @var Config $result */
-        $result = ConfigMapper::make()->mapFromFile($class, __DIR__ . '/model/example1/config.yml');
+        $result = Mapper::make()->mapFromFile($class, __DIR__ . '/model/example1/config.yml');
 
         self::assertInstanceOf($class, $result);
         self::assertNotNull($result->getNested());

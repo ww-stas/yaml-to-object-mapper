@@ -2,13 +2,13 @@
 
 namespace Diezz\YamlToObjectMapper\Tests;
 
-use  Diezz\YamlToObjectMapper\ConfigMapper;
+use  Diezz\YamlToObjectMapper\Mapper;
 use PHPUnit\Framework\TestCase;
 use Diezz\YamlToObjectMapper\Tests\Examples\DatabaseSchema09;
 use Diezz\YamlToObjectMapper\Tests\Examples\DatabaseSchema10;
 
 /**
- * @covers \Diezz\YamlToObjectMapper\ConfigMapper
+ * @covers \Diezz\YamlToObjectMapper\Mapper
  */
 class DefaultValueResolverTest extends TestCase
 {
@@ -18,7 +18,7 @@ class DefaultValueResolverTest extends TestCase
         $file = __DIR__ . '/examples/09-default-value-resolver.yml';
 
         //When
-        $result = ConfigMapper::make()->mapFromFile(DatabaseSchema09::class, $file);
+        $result = Mapper::make()->mapFromFile(DatabaseSchema09::class, $file);
 
         //Then
         self::assertCount(2, $result->tables);
@@ -33,7 +33,7 @@ class DefaultValueResolverTest extends TestCase
         $file = __DIR__ . '/examples/10-default-value-resolver.yml';
 
         //When
-        $result = ConfigMapper::make()->mapFromFile(DatabaseSchema10::class, $file);
+        $result = Mapper::make()->mapFromFile(DatabaseSchema10::class, $file);
 
         //Then
         self::assertCount(2, $result->tables);

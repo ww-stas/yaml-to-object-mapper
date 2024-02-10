@@ -13,7 +13,7 @@ use Diezz\YamlToObjectMapper\Resolver\ScalarArgumentResolver;
 use ReflectionException;
 use Symfony\Component\Yaml\Yaml;
 
-class ConfigMapper
+class Mapper
 {
     private ArgumentResolverFactory $argumentResolverFactory;
 
@@ -236,10 +236,10 @@ class ConfigMapper
         return $result;
     }
 
-    private function validate(ClassInfo $classInfo, ?array $config, ?array $parent = [], ?ConfigValidationResult $validationResult = null): ConfigValidationResult
+    private function validate(ClassInfo $classInfo, ?array $config, ?array $parent = [], ?ValidationResult $validationResult = null): ValidationResult
     {
         if (null === $validationResult) {
-            $validationResult = new ConfigValidationResult();
+            $validationResult = new ValidationResult();
         }
 
         $pathFunction = static fn(array $path) => implode(".", $path);

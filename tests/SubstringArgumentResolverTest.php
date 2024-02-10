@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
 
-use Diezz\YamlToObjectMapper\ConfigMapper;
+use Diezz\YamlToObjectMapper\Mapper;
 use Diezz\YamlToObjectMapper\Resolver\ArgumentResolverException;
 use Diezz\YamlToObjectMapper\Resolver\Parser\SyntaxException;
 use Diezz\YamlToObjectMapper\ValidationException;
@@ -10,7 +10,7 @@ use Diezz\YamlToObjectMapper\Tests\Examples\SubstringExample16;
 
 /**
  * @covers \Diezz\YamlToObjectMapper\Resolver\SubstringArgumentResolver
- * @covers \Diezz\YamlToObjectMapper\ConfigMapper
+ * @covers \Diezz\YamlToObjectMapper\Mapper
  */
 class SubstringArgumentResolverTest extends TestCase
 {
@@ -24,7 +24,7 @@ class SubstringArgumentResolverTest extends TestCase
     {
         $file = __DIR__ . '/examples/16-substring-resolver.yml';
 
-        $mapper = ConfigMapper::make();
+        $mapper = Mapper::make();
         $config = $mapper->mapFromFile(SubstringExample16::class, $file);
 
         self::assertEquals('Testing', $config->value);

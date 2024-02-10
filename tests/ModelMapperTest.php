@@ -2,17 +2,17 @@
 
 namespace Diezz\YamlToObjectMapper\Tests;
 
-use Diezz\YamlToObjectMapper\ConfigMapper;
+use Diezz\YamlToObjectMapper\Mapper;
 use Diezz\YamlToObjectMapper\ValidationException;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
 
 /**
- * @covers \Diezz\YamlToObjectMapper\ConfigMapper
+ * @covers \Diezz\YamlToObjectMapper\Mapper
  */
 class ModelMapperTest extends TestCase
 {
-    private ConfigMapper $mapper;
+    private Mapper $mapper;
 
     /**
      * @throws ReflectionException
@@ -57,7 +57,7 @@ class ModelMapperTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->mapper = ConfigMapper::make();
+        $this->mapper = Mapper::make();
         parent::setUp();
     }
 }

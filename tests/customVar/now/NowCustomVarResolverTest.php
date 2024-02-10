@@ -2,7 +2,7 @@
 
 namespace Diezz\YamlToObjectMapper\Tests\CustomVar\Now;
 
-use Diezz\YamlToObjectMapper\ConfigMapper;
+use Diezz\YamlToObjectMapper\Mapper;
 use Diezz\YamlToObjectMapper\Resolver\ArgumentResolverException;
 use Diezz\YamlToObjectMapper\ValidationException;
 use PHPUnit\Framework\TestCase;
@@ -23,7 +23,7 @@ class NowCustomVarResolverTest extends TestCase
     {
         //Given
         $file = __DIR__ . '/test01.yml';
-        $mapper = ConfigMapper::make();
+        $mapper = Mapper::make();
         $expectedResult = (new \DateTime())->format('Y-m-d');
 
         //When

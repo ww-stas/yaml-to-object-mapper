@@ -2,7 +2,7 @@
 
 namespace Diezz\YamlToObjectMapper\Tests;
 
-use Diezz\YamlToObjectMapper\ConfigMapper;
+use Diezz\YamlToObjectMapper\Mapper;
 use Diezz\YamlToObjectMapper\Resolver\ArgumentResolverException;
 use Diezz\YamlToObjectMapper\ValidationException;
 use PHPUnit\Framework\TestCase;
@@ -11,7 +11,7 @@ use Diezz\YamlToObjectMapper\Tests\Examples\ListModel01;
 use Diezz\YamlToObjectMapper\Tests\Examples\ListModel02;
 
 /**
- * @covers \Diezz\YamlToObjectMapper\ConfigMapper
+ * @covers \Diezz\YamlToObjectMapper\Mapper
  */
 class ListMappingTest extends TestCase
 {
@@ -26,7 +26,7 @@ class ListMappingTest extends TestCase
         $file = __DIR__ . '/examples/01-list.yml';
 
         //When
-        $result = ConfigMapper::make()->mapFromFile(ListModel01::class, $file);
+        $result = Mapper::make()->mapFromFile(ListModel01::class, $file);
 
         //Then
         self::assertEquals('test mapping of lists', $result->name);
@@ -51,7 +51,7 @@ class ListMappingTest extends TestCase
         $file = __DIR__ . '/examples/02-list.yml';
 
         //When
-        $result = ConfigMapper::make()->mapFromFile(ListModel02::class, $file);
+        $result = Mapper::make()->mapFromFile(ListModel02::class, $file);
 
         //Then
         $persons = $result->persons;

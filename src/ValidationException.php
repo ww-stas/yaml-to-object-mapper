@@ -4,9 +4,9 @@ namespace Diezz\YamlToObjectMapper;
 
 class ValidationException extends \Exception
 {
-    private ConfigValidationResult $result;
+    private ValidationResult $result;
 
-    public function __construct(ConfigValidationResult $result)
+    public function __construct(ValidationResult $result)
     {
         $this->result = $result;
         parent::__construct((string)$this);

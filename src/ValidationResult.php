@@ -2,7 +2,7 @@
 
 namespace Diezz\YamlToObjectMapper;
 
-class ConfigValidationResult
+class ValidationResult
 {
     private array $errors = [];
 

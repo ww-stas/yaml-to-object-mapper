@@ -2,7 +2,7 @@
 
 namespace Diezz\YamlToObjectMapper\Tests;
 
-use Diezz\YamlToObjectMapper\ConfigMapper;
+use Diezz\YamlToObjectMapper\Mapper;
 use Diezz\YamlToObjectMapper\Resolver\ArgumentResolverException;
 use Diezz\YamlToObjectMapper\Resolver\CircularDependencyException;
 use PHPUnit\Framework\TestCase;
@@ -22,7 +22,7 @@ class SelfArgumentMappingTest extends TestCase
         $file = __DIR__ . '/examples/03-self.yml';
 
         //When
-        $result = ConfigMapper::make()->mapFromFile(Self03::class, $file);
+        $result = Mapper::make()->mapFromFile(Self03::class, $file);
 
         //Then
         self::assertEquals($result->name, $result->target);
@@ -34,7 +34,7 @@ class SelfArgumentMappingTest extends TestCase
         $file = __DIR__ . '/examples/04-self.yml';
 
         //When
-        $result = ConfigMapper::make()->mapFromFile(Self04::class, $file);
+        $result = Mapper::make()->mapFromFile(Self04::class, $file);
 
         //Then
         $secondPerson = $result->persons[1];
@@ -47,7 +47,7 @@ class SelfArgumentMappingTest extends TestCase
         $file = __DIR__ . '/examples/05-self.yml';
         $this->expectException(ArgumentResolverException::class);
 
-        ConfigMapper::make()->mapFromFile(Self04::class, $file);
+        Mapper::make()->mapFromFile(Self04::class, $file);
     }
 
     public function testSelfArgumentResolverOnFieldThatShouldBeResolvedAsWell(): void
@@ -57,7 +57,7 @@ class SelfArgumentMappingTest extends TestCase
         $expectedResult = (new \DateTime())->format('Y-m-d');
 
         //When
-        $result = ConfigMapper::make()->mapFromFile(Self05::class, $file);
+        $result = Mapper::make()->mapFromFile(Self05::class, $file);
 
         //Then
         self::assertEquals($expectedResult, $result->target);
@@ -71,7 +71,7 @@ class SelfArgumentMappingTest extends TestCase
         $this->expectException(CircularDependencyException::class);
 
         //When && Then
-        ConfigMapper::make()->mapFromFile(Self12::class, $file);
+        Mapper::make()->mapFromFile(Self12::class, $file);
     }
 
     public function testSelfArgumentResolverWithCircularReferences2(): void
@@ -81,6 +81,6 @@ class SelfArgumentMappingTest extends TestCase
         $this->expectException(CircularDependencyException::class);
 
         //When && Then
-        ConfigMapper::make()->mapFromFile(Self12::class, $file);
+        Mapper::make()->mapFromFile(Self12::class, $file);
     }
 }

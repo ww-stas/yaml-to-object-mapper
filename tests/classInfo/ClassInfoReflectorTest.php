@@ -11,7 +11,7 @@ use Diezz\YamlToObjectMapper\Tests\Examples\Person;
 use Diezz\YamlToObjectMapper\Tests\Examples\RequiredModel;
 
 /**
- * @covers \Diezz\YamlToObjectMapper\ConfigMapper
+ * @covers \Diezz\YamlToObjectMapper\Mapper
  */
 class ClassInfoReflectorTest extends TestCase
 {

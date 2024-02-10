@@ -2,7 +2,7 @@
 
 namespace Diezz\YamlToObjectMapper\Tests;
 
-use Diezz\YamlToObjectMapper\ConfigMapper;
+use Diezz\YamlToObjectMapper\Mapper;
 use Diezz\YamlToObjectMapper\Resolver\ArgumentResolverException;
 use Diezz\YamlToObjectMapper\Resolver\Parser\SyntaxException;
 use Diezz\YamlToObjectMapper\Tests\Examples\ConcatExample17;
@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Diezz\YamlToObjectMapper\Resolver\ConcatArgumentResolver
- * @covers \Diezz\YamlToObjectMapper\ConfigMapper
+ * @covers \Diezz\YamlToObjectMapper\Mapper
  */
 class ConcatArgumentResolverTest extends TestCase
 {
@@ -25,7 +25,7 @@ class ConcatArgumentResolverTest extends TestCase
     {
         $file = __DIR__ . '/examples/17-concat-resolver.yml';
 
-        $mapper = ConfigMapper::make();
+        $mapper = Mapper::make();
         $config = $mapper->mapFromFile(ConcatExample17::class, $file);
 
         self::assertEquals('some-string-arg1-arg2', $config->value);

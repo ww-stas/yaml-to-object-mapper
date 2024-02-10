@@ -2,7 +2,7 @@
 
 namespace Diezz\YamlToObjectMapper\Tests;
 
-use Diezz\YamlToObjectMapper\ConfigMapper;
+use Diezz\YamlToObjectMapper\Mapper;
 use Diezz\YamlToObjectMapper\Resolver\ArgumentResolverException;
 use Diezz\YamlToObjectMapper\Resolver\Parser\SyntaxException;
 use Diezz\YamlToObjectMapper\ValidationException;
@@ -11,7 +11,7 @@ use Diezz\YamlToObjectMapper\Tests\Examples\CustomArgumentResolver15;
 
 /**
  * @covers \Diezz\YamlToObjectMapper\Resolver\CustomArgumentResolver
- * @covers \Diezz\YamlToObjectMapper\ConfigMapper
+ * @covers \Diezz\YamlToObjectMapper\Mapper
  */
 class CustomArgumentResolverTest extends TestCase
 {
@@ -25,7 +25,7 @@ class CustomArgumentResolverTest extends TestCase
     {
         $file = __DIR__ . '/examples/15-custom-resolver.yml';
 
-        $mapper = ConfigMapper::make();
+        $mapper = Mapper::make();
         //Register custom argument resolver
         $mapper->registerCustomArgumentResolver('foo', FooArgumentResolver::class);
         $mapper->registerCustomArgumentResolver('sum', SumArgumentResolver::class);
