@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Test;
+namespace Diezz\YamlToObjectMapper\Tests;
 
 use Diezz\YamlToObjectMapper\ConfigMapper;
 use Diezz\YamlToObjectMapper\ValidationException;

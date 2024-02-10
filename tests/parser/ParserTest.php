@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Test\Parser;
+namespace Diezz\YamlToObjectMapper\Tests\Parser;
 
 use Diezz\YamlToObjectMapper\Resolver\Parser\Parser;
 use Diezz\YamlToObjectMapper\Resolver\Parser\SyntaxException;

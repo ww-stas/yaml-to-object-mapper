@@ -6,7 +6,7 @@ use Diezz\YamlToObjectMapper\Resolver\ArgumentResolverException;
 use Diezz\YamlToObjectMapper\Resolver\Parser\SyntaxException;
 use Diezz\YamlToObjectMapper\ValidationException;
 use PHPUnit\Framework\TestCase;
-use Test\Examples\SubstringExample16;
+use Diezz\YamlToObjectMapper\Tests\Examples\SubstringExample16;
 
 /**
  * @covers \Diezz\YamlToObjectMapper\Resolver\SubstringArgumentResolver

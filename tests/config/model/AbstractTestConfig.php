@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Test\Config\Model;
+namespace Diezz\YamlToObjectMapper\Tests\Config\Model;
 
 abstract class AbstractTestConfig
 {

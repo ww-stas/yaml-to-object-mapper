@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Test;
+namespace Diezz\YamlToObjectMapper\Tests;
 
 use Diezz\YamlToObjectMapper\ConfigMapper;
 use PHPUnit\Framework\TestCase;
-use Test\Examples\EnvVariable11;
+use Diezz\YamlToObjectMapper\Tests\Examples\EnvVariable11;
 
 /**
  * @covers \Diezz\YamlToObjectMapper\Resolver\EnvironmentArgumentResolver

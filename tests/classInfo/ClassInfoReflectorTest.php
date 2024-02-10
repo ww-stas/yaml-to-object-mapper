@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Test\ClassInfo;
+namespace Diezz\YamlToObjectMapper\Tests\ClassInfo;
 
 use Diezz\YamlToObjectMapper\ClassInfoReflector;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
-use Test\CustomVar\Now\Test01TargetClass;
-use Test\Examples\ListModel02;
-use Test\Examples\Person;
-use Test\Examples\RequiredModel;
+use Diezz\YamlToObjectMapper\Tests\CustomVar\Now\Test01TargetClass;
+use Diezz\YamlToObjectMapper\Tests\Examples\ListModel02;
+use Diezz\YamlToObjectMapper\Tests\Examples\Person;
+use Diezz\YamlToObjectMapper\Tests\Examples\RequiredModel;
 
 /**
  * @covers \Diezz\YamlToObjectMapper\ConfigMapper

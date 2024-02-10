@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Test\Examples;
+namespace Diezz\YamlToObjectMapper\Tests\Examples;
 
 class Required09
 {

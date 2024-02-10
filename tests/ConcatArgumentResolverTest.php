@@ -1,12 +1,13 @@
 <?php declare(strict_types=1);
 
+namespace Diezz\YamlToObjectMapper\Tests;
 
 use Diezz\YamlToObjectMapper\ConfigMapper;
 use Diezz\YamlToObjectMapper\Resolver\ArgumentResolverException;
 use Diezz\YamlToObjectMapper\Resolver\Parser\SyntaxException;
+use Diezz\YamlToObjectMapper\Tests\Examples\ConcatExample17;
 use Diezz\YamlToObjectMapper\ValidationException;
 use PHPUnit\Framework\TestCase;
-use Test\Examples\ConcatExample17;
 
 /**
  * @covers \Diezz\YamlToObjectMapper\Resolver\ConcatArgumentResolver

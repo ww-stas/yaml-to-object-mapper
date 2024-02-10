@@ -4,6 +4,10 @@
     "type": "library",
     "license": "MIT",
     "minimum-stability": "stable",
+    "keywords": [
+        "yaml",
+        "mapper"
+    ],
     "require": {
         "php": ">=8",
         "symfony/yaml": "^6.0"
@@ -13,8 +17,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Diezz\\YamlToObjectMapper\\": "src/",
-            "Test\\": "tests/"
+            "Diezz\\YamlToObjectMapper\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Diezz\\YamlToObjectMapper\\Tests\\": "tests/"
         }
     }
 }

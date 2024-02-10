@@ -1,12 +1,15 @@
 <?php declare(strict_types=1);
 
-namespace Test;
+namespace Diezz\YamlToObjectMapper\Tests;
 
-use Diezz\YamlToObjectMapper\ConfigMapper;
+use  Diezz\YamlToObjectMapper\ConfigMapper;
 use PHPUnit\Framework\TestCase;
-use Test\Examples\DatabaseSchema09;
-use Test\Examples\DatabaseSchema10;
+use Diezz\YamlToObjectMapper\Tests\Examples\DatabaseSchema09;
+use Diezz\YamlToObjectMapper\Tests\Examples\DatabaseSchema10;
 
+/**
+ * @covers \Diezz\YamlToObjectMapper\ConfigMapper
+ */
 class DefaultValueResolverTest extends TestCase
 {
     public function testMappingTable(): void

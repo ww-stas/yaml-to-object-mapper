@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Test\Config\Model\Example1;
+namespace Diezz\YamlToObjectMapper\Tests\Config\Model\Example1;
 
 class Config
 {

@@ -1,15 +1,15 @@
 <?php declare(strict_types=1);
 
-namespace Test;
+namespace Diezz\YamlToObjectMapper\Tests;
 
 use Diezz\YamlToObjectMapper\ConfigMapper;
 use Diezz\YamlToObjectMapper\Resolver\ArgumentResolverException;
 use Diezz\YamlToObjectMapper\Resolver\CircularDependencyException;
 use PHPUnit\Framework\TestCase;
-use Test\Examples\Self03;
-use Test\Examples\Self04;
-use Test\Examples\Self05;
-use Test\Examples\Self12;
+use Diezz\YamlToObjectMapper\Tests\Examples\Self03;
+use Diezz\YamlToObjectMapper\Tests\Examples\Self04;
+use Diezz\YamlToObjectMapper\Tests\Examples\Self05;
+use Diezz\YamlToObjectMapper\Tests\Examples\Self12;
 
 /**
  * @covers \Diezz\YamlToObjectMapper\Resolver\SelfArgumentResolver

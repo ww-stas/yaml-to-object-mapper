@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Test\CustomVar\Now;
+namespace Diezz\YamlToObjectMapper\Tests\CustomVar\Now;
 
 use Diezz\YamlToObjectMapper\Attributes\Required;
 

@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Test;
+namespace Diezz\YamlToObjectMapper\Tests;
 
 use Diezz\YamlToObjectMapper\ConfigMapper;
 use Diezz\YamlToObjectMapper\Resolver\ArgumentResolverException;
 use Diezz\YamlToObjectMapper\ValidationException;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
-use Test\Examples\ListModel01;
-use Test\Examples\ListModel02;
+use Diezz\YamlToObjectMapper\Tests\Examples\ListModel01;
+use Diezz\YamlToObjectMapper\Tests\Examples\ListModel02;
 
 /**
  * @covers \Diezz\YamlToObjectMapper\ConfigMapper

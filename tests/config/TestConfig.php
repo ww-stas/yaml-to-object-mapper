@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Test\Config;
+namespace Diezz\YamlToObjectMapper\Tests\Config;
 
 use Diezz\YamlToObjectMapper\ConfigMapper;
 use Diezz\YamlToObjectMapper\ValidationException;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
-use Test\Config\Model\Example1\Config;
-use Test\Config\Model\Example1\Nested;
+use Diezz\YamlToObjectMapper\Tests\Config\Model\Example1\Config;
+use Diezz\YamlToObjectMapper\Tests\Config\Model\Example1\Nested;
 
 class TestConfig extends TestCase
 {

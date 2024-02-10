@@ -83,8 +83,8 @@ class ConfigMapper
             throw new ValidationException($validationResult);
         }
 
-        $preMap = $this->getMappingConfig($classInfo, $config, $instance);
-        $rootResolver = new InstanceArgumentResolver($classInfo, $preMap);
+        $mappingConfig = $this->getMappingConfig($classInfo, $config, $instance);
+        $rootResolver = new InstanceArgumentResolver($classInfo, $mappingConfig);
 
         return $rootResolver->resolve(new Context($config, $rootResolver));
     }
@@ -118,55 +118,93 @@ class ConfigMapper
             $config = [];
         }
 
-        foreach ($config as $fieldName => $rawValue) {
-            $field = $classInfo->getClassField($fieldName);
-            //Skip values that doesn't exist in config file but has a default values
-            if ($field !== null && !array_key_exists($fieldName, $config)) {
+        foreach ($classInfo->getFields() as $field) {
+            $fieldName = $field->getName();
+            if (!array_key_exists($fieldName, $config)) {
+                //Skip values that doesn't exist in config file but has a default values
                 if (!$field->hasDefaultValueResolver()) {
                     continue;
                 }
 
                 //fallback to defaultValueResolver
-                $defaultValueResolver = $field->getDefaultValueResolver();
-                $rawValue = match ($defaultValueResolver) {
-                    DefaultValueResolver::PARENT_KEY => $parentKey,
-                    DefaultValueResolver::NESTED_LIST => $config,
-                };
-            }
-
-            $argResolver = null;
-
-            if ($field === null) {
-                //Not IgnoreUnknown
-                if (!$classInfo->isIgnoreUnknown()) {
-                    throw new InvalidConfigPathException("Invalid path $fieldName on class {$classInfo->getClassName()}. To prevent this behaviour use #[IgnoreUnknown] on a target class");
-                }
-                $argResolver = new ScalarArgumentResolver($rawValue);
-            } else if ($field->isPrimitive()) {
-                if (is_bool($rawValue) || is_int($rawValue) || is_array($rawValue)) {
-                    $argResolver = new ScalarArgumentResolver($rawValue);
-                } else {
-                    $argResolver = $this->processExpression($rawValue);
-                }
-            } else if ($field->isList()) {
-                $value = [];
-                if ($field->isTypedCollection()) {
-                    foreach ($rawValue as $key => $item) {
-                        $value[] = new InstanceArgumentResolver($field->getClassInfo(), $this->getMappingConfig($field->getClassInfo(), $item, $key));
+                switch ($field->getDefaultValueResolver()) {
+                    case DefaultValueResolver::PARENT_KEY:
+                    {
+                        $rawValue = $parentKey;
+                        break;
                     }
-                } else {
-                    $value = $this->doMapArray($rawValue);
+                    case DefaultValueResolver::NESTED_LIST:
+                    {
+                        $rawValue = $config;
+                        $config = [];
+                        break;
+                    }
                 }
-
-                $argResolver = new ListArgumentResolver($value);
             } else {
-                $argResolver = new InstanceArgumentResolver($field->getClassInfo(), $this->getMappingConfig($field->getClassInfo(), $rawValue, $field->newInstance()));
+                $rawValue = $config[$fieldName];
+                unset($config[$fieldName]);
             }
 
-            $mappingConfig[$fieldName] = $argResolver;
+            $mappingConfig[$fieldName] = $this->toArgumentResolver($field, $rawValue);
+        }
+
+        if (!empty($config) && !$classInfo->isIgnoreUnknown()) {
+            throw new InvalidConfigPathException($config, $classInfo);
+        }
+        foreach ($config as $fieldName => $rawValue) {
+            $mappingConfig[$fieldName] = $this->createArgumentResolverForPrimitive($rawValue);
         }
 
         return $mappingConfig;
+    }
+
+
+    /**
+     * @param ClassField $field
+     * @param mixed      $rawValue
+     *
+     * @throws Resolver\ArgumentResolverException
+     * @throws Resolver\Parser\SyntaxException
+     * @return ArgumentResolver
+     */
+    private function toArgumentResolver(ClassField $field, mixed $rawValue): ArgumentResolver
+    {
+        if ($field->isPrimitive()) {
+            $argResolver = $this->createArgumentResolverForPrimitive($rawValue);
+        } else if ($field->isList()) {
+            $value = [];
+            if ($field->isTypedCollection()) {
+                foreach ($rawValue as $key => $item) {
+                    $value[] = new InstanceArgumentResolver($field->getClassInfo(), $this->getMappingConfig($field->getClassInfo(), $item, $key));
+                }
+            } else {
+                $value = $this->doMapArray($rawValue);
+            }
+
+            $argResolver = new ListArgumentResolver($value);
+        } else {
+            $argResolver = new InstanceArgumentResolver($field->getClassInfo(), $this->getMappingConfig($field->getClassInfo(), $rawValue, $field->newInstance()));
+        }
+
+        return $argResolver;
+    }
+
+
+    /**
+     * @param mixed $rawValue
+     *
+     * @throws Resolver\Parser\SyntaxException
+     * @return ArgumentResolver
+     */
+    private function createArgumentResolverForPrimitive(mixed $rawValue): ArgumentResolver
+    {
+        if (is_bool($rawValue) || is_int($rawValue) || is_array($rawValue)) {
+            $argResolver = new ScalarArgumentResolver($rawValue);
+        } else {
+            $argResolver = $this->processExpression($rawValue);
+        }
+
+        return $argResolver;
     }
 
     /**
@@ -243,10 +281,10 @@ class ConfigMapper
                     }
                     foreach ($config[$fieldName] as $key => $value) {
                         $path[] = $key;
-                        $validationResult = self::validate($field->getClassInfo(), $value, $path, $validationResult);
+                        $validationResult = $this->validate($field->getClassInfo(), $value, $path, $validationResult);
                     }
                 } else {
-                    $validationResult = self::validate($field->getClassInfo(), $config[$fieldName], $path, $validationResult);
+                    $validationResult = $this->validate($field->getClassInfo(), $config[$fieldName], $path, $validationResult);
                 }
             }
         }
