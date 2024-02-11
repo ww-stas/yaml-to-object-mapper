@@ -4,6 +4,8 @@ namespace Diezz\YamlToObjectMapper\Tests;
 
 use Diezz\YamlToObjectMapper\Mapper;
 use Diezz\YamlToObjectMapper\Resolver\ArgumentResolverException;
+use Diezz\YamlToObjectMapper\Tests\Examples\ListModelPrivate01;
+use Diezz\YamlToObjectMapper\Tests\Examples\ListModelSetterAttribute01;
 use Diezz\YamlToObjectMapper\ValidationException;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
@@ -38,6 +40,46 @@ class ListMappingTest extends TestCase
         self::assertEquals('two', $list['two']);
         self::assertArrayHasKey('three', $list);
         self::assertEquals($result->name, $list['three']);
+    }
+
+    public function testListMappingWithPrivateFields(): void
+    {
+        //Given
+        $file = __DIR__ . '/examples/01-list.yml';
+
+        //When
+        $result = Mapper::make()->mapFromFile(ListModelPrivate01::class, $file);
+
+        //Then
+        self::assertEquals('test mapping of lists', $result->getName());
+        $list = $result->getList();
+        self::assertCount(3, $list);
+        self::assertArrayHasKey('one', $list);
+        self::assertEquals('one', $list['one']);
+        self::assertArrayHasKey('two', $list);
+        self::assertEquals('two', $list['two']);
+        self::assertArrayHasKey('three', $list);
+        self::assertEquals($result->getName(), $list['three']);
+    }
+
+    public function testListMappingWithSetterAttribute(): void
+    {
+        //Given
+        $file = __DIR__ . '/examples/01-list.yml';
+
+        //When
+        $result = Mapper::make()->mapFromFile(ListModelSetterAttribute01::class, $file);
+
+        //Then
+        self::assertEquals('test mapping of lists', $result->getName());
+        $list = $result->getList();
+        self::assertCount(3, $list);
+        self::assertArrayHasKey('one', $list);
+        self::assertEquals('one', $list['one']);
+        self::assertArrayHasKey('two', $list);
+        self::assertEquals('two', $list['two']);
+        self::assertArrayHasKey('three', $list);
+        self::assertEquals($result->getName(), $list['three']);
     }
 
     /**

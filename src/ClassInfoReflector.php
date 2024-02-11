@@ -6,6 +6,7 @@ use Diezz\YamlToObjectMapper\Attributes\Collection;
 use Diezz\YamlToObjectMapper\Attributes\DefaultValueResolver;
 use Diezz\YamlToObjectMapper\Attributes\IgnoreUnknown;
 use Diezz\YamlToObjectMapper\Attributes\Required;
+use Diezz\YamlToObjectMapper\attributes\Setter;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionProperty;
@@ -85,6 +86,15 @@ class ClassInfoReflector
         $classField->setIsPublic($isPublic);
 
         if (true === $isPublic) {
+            return;
+        }
+
+        $setterAttributeOptional = $reflectionProperty->getAttributes(Setter::class);
+        if (!empty($setterAttributeOptional)) {
+            /**@var  Setter $setterAttribute */
+            $setterAttribute = $setterAttributeOptional[0]->newInstance();
+            $classField->setSetter($setterAttribute->getSetterName());
+
             return;
         }
 
