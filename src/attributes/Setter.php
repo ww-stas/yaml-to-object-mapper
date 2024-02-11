@@ -10,11 +10,8 @@ use Attribute;
 #[Attribute(Attribute::TARGET_PROPERTY)]
 class Setter
 {
-    private string $setterName;
-
-    public function __construct(string $setterName)
+    public function __construct(private string $setterName)
     {
-        $this->setterName = $setterName;
     }
 
     public function getSetterName(): string

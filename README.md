@@ -55,6 +55,20 @@ class ConnectionSettings {
 $config = Mapper::make()->mapFromFile(Config::class, 'config.yml');
 ```
 
+### Setting Values in Target Class Properties
+
+Setting Values in Target Class Properties
+The mapper automatically assigns mapped values to corresponding properties in the target class. Here's what to keep in mind:
+
+**Property Access:**
+- Public Properties: Direct assignment for seamless updates.
+- Non-Public Properties: Require corresponding setter methods.
+
+**Setter Naming:**
+- **Default Approach:** Uses a setter named like the property with a set prefix (e.g., setName for name property).
+- **Custom Naming:** Override the default with the `#[Setter('yourSetterName')]` attribute on the property (e.g., `#[Setter('updateName')]`).
+
+
 ## Extended usage
 
 ### Dynamic Field Mapping with Default Value Resolvers
