@@ -11,7 +11,7 @@
         </include>
         <report>
             <clover outputFile="codecoverage/coverage-clover.xml"/>
-            <html outputDirectory=".codecoverage/php-code-coverage" lowUpperBound="40" highLowerBound="80"/>
+            <html outputDirectory="codecoverage/php-code-coverage" lowUpperBound="40" highLowerBound="80"/>
             <xml outputDirectory="codecoverage/phpunit"/>
         </report>
     </coverage>
