@@ -2,23 +2,22 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
          bootstrap="vendor/autoload.php"
-         cacheResultFile=".phpunit.cache/test-results"
-         executionOrder="depends,defects"
-         forceCoversAnnotation="true"
-         beStrictAboutCoversAnnotation="true"
-         beStrictAboutOutputDuringTests="true"
-         beStrictAboutTodoAnnotatedTests="true"
-         convertDeprecationsToExceptions="true"
-         failOnRisky="true"
-         failOnWarning="true"
-         verbose="true">
+         processIsolation="false" stopOnError="true" stopOnFailure="true"
+         stopOnIncomplete="false" stopOnSkipped="true" stopOnRisky="true" timeoutForSmallTests="1"
+         timeoutForMediumTests="10" timeoutForLargeTests="60" colors="true">
+    <coverage>
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+        <report>
+            <clover outputFile="codecoverage/coverage-clover.xml"/>
+            <html outputDirectory=".codecoverage/php-code-coverage" lowUpperBound="40" highLowerBound="80"/>
+            <xml outputDirectory="codecoverage/phpunit"/>
+        </report>
+    </coverage>
     <testsuites>
         <testsuite name="default">
             <directory>tests</directory>
         </testsuite>
     </testsuites>
-
-    <whitelist processUncoveredFilesFromWhitelist="true">
-        <directory suffix=".php">src</directory>
-    </whitelist>
 </phpunit>
