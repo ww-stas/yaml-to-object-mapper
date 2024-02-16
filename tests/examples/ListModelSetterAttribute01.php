@@ -2,7 +2,7 @@
 
 namespace Diezz\YamlToObjectMapper\Tests\Examples;
 
-use Diezz\YamlToObjectMapper\attributes\Setter;
+use Diezz\YamlToObjectMapper\Attributes\Setter;
 
 class ListModelSetterAttribute01
 {

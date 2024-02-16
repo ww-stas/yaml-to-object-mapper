@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Diezz\YamlToObjectMapper\attributes;
+namespace Diezz\YamlToObjectMapper\Attributes;
 
 use Attribute;
 use Diezz\YamlToObjectMapper\CustomValidator;

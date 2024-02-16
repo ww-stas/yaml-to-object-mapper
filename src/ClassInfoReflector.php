@@ -6,7 +6,7 @@ use Diezz\YamlToObjectMapper\Attributes\Collection;
 use Diezz\YamlToObjectMapper\Attributes\DefaultValueResolver;
 use Diezz\YamlToObjectMapper\Attributes\IgnoreUnknown;
 use Diezz\YamlToObjectMapper\Attributes\Required;
-use Diezz\YamlToObjectMapper\attributes\Setter;
+use Diezz\YamlToObjectMapper\Attributes\Setter;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionProperty;
