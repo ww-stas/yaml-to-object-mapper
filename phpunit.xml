@@ -2,8 +2,8 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
          bootstrap="vendor/autoload.php"
-         processIsolation="false" stopOnError="true" stopOnFailure="true"
-         stopOnIncomplete="false" stopOnSkipped="true" stopOnRisky="true" timeoutForSmallTests="1"
+         processIsolation="false" stopOnError="false" stopOnFailure="false"
+         stopOnIncomplete="false" stopOnSkipped="false" stopOnRisky="true" timeoutForSmallTests="1"
          timeoutForMediumTests="10" timeoutForLargeTests="60" colors="true">
     <coverage>
         <include>
