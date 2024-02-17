@@ -22,7 +22,7 @@ class SubstringArgumentResolverTest extends TestCase
      */
     public function testSubstringArgumentResolver(): void
     {
-        $file = __DIR__ . '/examples/16-substring-resolver.yml';
+        $file = __DIR__ . '/Examples/16-substring-resolver.yml';
 
         $mapper = Mapper::make();
         $config = $mapper->mapFromFile(SubstringExample16::class, $file);

@@ -23,7 +23,7 @@ class CustomArgumentResolverTest extends TestCase
      */
     public function testCustomArgumentResolver(): void
     {
-        $file = __DIR__ . '/examples/15-custom-resolver.yml';
+        $file = __DIR__ . '/Examples/15-custom-resolver.yml';
 
         $mapper = Mapper::make();
         //Register custom argument resolver

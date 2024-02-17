@@ -15,7 +15,7 @@ class ValidationTest extends TestCase
 {
     public function testRequiredValidationOnMissedField(): void
     {
-        $file = __DIR__ . '/examples/08-required-validation.yml';
+        $file = __DIR__ . '/Examples/08-required-validation.yml';
         $this->expectException(ValidationException::class);
 
         Mapper::make()->mapFromFile(Required08::class, $file);
@@ -24,7 +24,7 @@ class ValidationTest extends TestCase
     public function testValidationOnMissedFieldForNullableField(): void
     {
         //Given
-        $file = __DIR__ . '/examples/08-required-validation.yml';
+        $file = __DIR__ . '/Examples/08-required-validation.yml';
 
         //When
         $result = Mapper::make()->mapFromFile(Required09::class, $file);

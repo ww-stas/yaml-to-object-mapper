@@ -23,7 +23,7 @@ class ConcatArgumentResolverTest extends TestCase
      */
     public function testSubstringArgumentResolver(): void
     {
-        $file = __DIR__ . '/examples/17-concat-resolver.yml';
+        $file = __DIR__ . '/Examples/17-concat-resolver.yml';
 
         $mapper = Mapper::make();
         $config = $mapper->mapFromFile(ConcatExample17::class, $file);

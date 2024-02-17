@@ -20,7 +20,7 @@ class EnvVariablesTest extends TestCase
     public function testReadingEnvVariable(): void
     {
         //Given
-        $file = __DIR__ . '/examples/11-env-variables.yml';
+        $file = __DIR__ . '/Examples/11-env-variables.yml';
 
         //When
         $result = Mapper::make()->mapFromFile(EnvVariable11::class, $file);

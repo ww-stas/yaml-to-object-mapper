@@ -19,7 +19,7 @@ class SelfArgumentMappingTest extends TestCase
     public function testSelfArgumentResolver(): void
     {
         //Given
-        $file = __DIR__ . '/examples/03-self.yml';
+        $file = __DIR__ . '/Examples/03-self.yml';
 
         //When
         $result = Mapper::make()->mapFromFile(Self03::class, $file);
@@ -31,7 +31,7 @@ class SelfArgumentMappingTest extends TestCase
     public function testSelfArgumentResolverOfNestedField(): void
     {
         //Given
-        $file = __DIR__ . '/examples/04-self.yml';
+        $file = __DIR__ . '/Examples/04-self.yml';
 
         //When
         $result = Mapper::make()->mapFromFile(Self04::class, $file);
@@ -44,7 +44,7 @@ class SelfArgumentMappingTest extends TestCase
     public function testSelfArgumentResolverOfNestedFieldShouldThrowAnException(): void
     {
         //Given
-        $file = __DIR__ . '/examples/05-self.yml';
+        $file = __DIR__ . '/Examples/05-self.yml';
         $this->expectException(ArgumentResolverException::class);
 
         Mapper::make()->mapFromFile(Self04::class, $file);
@@ -53,7 +53,7 @@ class SelfArgumentMappingTest extends TestCase
     public function testSelfArgumentResolverOnFieldThatShouldBeResolvedAsWell(): void
     {
         //Given
-        $file = __DIR__ . '/examples/06-self.yml';
+        $file = __DIR__ . '/Examples/06-self.yml';
         $expectedResult = (new \DateTime())->format('Y-m-d');
 
         //When
@@ -67,7 +67,7 @@ class SelfArgumentMappingTest extends TestCase
     public function testSelfArgumentResolverWithCircularReferences(): void
     {
         //Given
-        $file = __DIR__ . '/examples/12-self-circular.yml';
+        $file = __DIR__ . '/Examples/12-self-circular.yml';
         $this->expectException(CircularDependencyException::class);
 
         //When && Then
@@ -77,7 +77,7 @@ class SelfArgumentMappingTest extends TestCase
     public function testSelfArgumentResolverWithCircularReferences2(): void
     {
         //Given
-        $file = __DIR__ . '/examples/13-self-selfRefernce.yml';
+        $file = __DIR__ . '/Examples/13-self-selfRefernce.yml';
         $this->expectException(CircularDependencyException::class);
 
         //When && Then

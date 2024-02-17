@@ -15,7 +15,7 @@ class DefaultValueResolverTest extends TestCase
     public function testMappingTable(): void
     {
         //Given
-        $file = __DIR__ . '/examples/09-default-value-resolver.yml';
+        $file = __DIR__ . '/Examples/09-default-value-resolver.yml';
 
         //When
         $result = Mapper::make()->mapFromFile(DatabaseSchema09::class, $file);
@@ -30,7 +30,7 @@ class DefaultValueResolverTest extends TestCase
     public function testMappingTableWithDefaultValueResolver(): void
     {
         //Given
-        $file = __DIR__ . '/examples/10-default-value-resolver.yml';
+        $file = __DIR__ . '/Examples/10-default-value-resolver.yml';
 
         //When
         $result = Mapper::make()->mapFromFile(DatabaseSchema10::class, $file);

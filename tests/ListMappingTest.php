@@ -25,7 +25,7 @@ class ListMappingTest extends TestCase
     public function testListMapping(): void
     {
         //Given
-        $file = __DIR__ . '/examples/01-list.yml';
+        $file = __DIR__ . '/Examples/01-list.yml';
 
         //When
         $result = Mapper::make()->mapFromFile(ListModel01::class, $file);
@@ -45,7 +45,7 @@ class ListMappingTest extends TestCase
     public function testListMappingWithPrivateFields(): void
     {
         //Given
-        $file = __DIR__ . '/examples/01-list.yml';
+        $file = __DIR__ . '/Examples/01-list.yml';
 
         //When
         $result = Mapper::make()->mapFromFile(ListModelPrivate01::class, $file);
@@ -65,7 +65,7 @@ class ListMappingTest extends TestCase
     public function testListMappingWithSetterAttribute(): void
     {
         //Given
-        $file = __DIR__ . '/examples/01-list.yml';
+        $file = __DIR__ . '/Examples/01-list.yml';
 
         //When
         $result = Mapper::make()->mapFromFile(ListModelSetterAttribute01::class, $file);
@@ -90,7 +90,7 @@ class ListMappingTest extends TestCase
     public function testListMappingWithNestedSubclasses(): void
     {
         //Given
-        $file = __DIR__ . '/examples/02-list.yml';
+        $file = __DIR__ . '/Examples/02-list.yml';
 
         //When
         $result = Mapper::make()->mapFromFile(ListModel02::class, $file);
