@@ -4,16 +4,18 @@ namespace Diezz\YamlToObjectMapper\Tests;
 
 use Diezz\YamlToObjectMapper\Mapper;
 use Diezz\YamlToObjectMapper\Resolver\ArgumentResolverException;
+use Diezz\YamlToObjectMapper\Tests\Examples\ListModel01;
+use Diezz\YamlToObjectMapper\Tests\Examples\ListModel02;
 use Diezz\YamlToObjectMapper\Tests\Examples\ListModelPrivate01;
 use Diezz\YamlToObjectMapper\Tests\Examples\ListModelSetterAttribute01;
 use Diezz\YamlToObjectMapper\ValidationException;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
-use Diezz\YamlToObjectMapper\Tests\Examples\ListModel01;
-use Diezz\YamlToObjectMapper\Tests\Examples\ListModel02;
 
 /**
  * @covers \Diezz\YamlToObjectMapper\Mapper
+ * @covers \Diezz\YamlToObjectMapper\ClassInfo
+ * @covers \Diezz\YamlToObjectMapper\Resolver\ListArgumentResolver
  */
 class ListMappingTest extends TestCase
 {
@@ -41,6 +43,7 @@ class ListMappingTest extends TestCase
         self::assertArrayHasKey('three', $list);
         self::assertEquals($result->name, $list['three']);
     }
+
 
     public function testListMappingWithPrivateFields(): void
     {

@@ -10,6 +10,8 @@ use Diezz\YamlToObjectMapper\Tests\Examples\SubstringExample16;
 
 /**
  * @covers \Diezz\YamlToObjectMapper\Resolver\SubstringArgumentResolver
+ * @covers \Diezz\YamlToObjectMapper\Resolver\CustomArgumentResolver
+ * @covers \Diezz\YamlToObjectMapper\Resolver\ArgumentResolver
  * @covers \Diezz\YamlToObjectMapper\Mapper
  */
 class SubstringArgumentResolverTest extends TestCase

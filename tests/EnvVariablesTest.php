@@ -8,6 +8,7 @@ use Diezz\YamlToObjectMapper\Tests\Examples\EnvVariable11;
 
 /**
  * @covers \Diezz\YamlToObjectMapper\Resolver\EnvironmentArgumentResolver
+ * @covers \Diezz\YamlToObjectMapper\Resolver\ArgumentResolver
  */
 class EnvVariablesTest extends TestCase
 {

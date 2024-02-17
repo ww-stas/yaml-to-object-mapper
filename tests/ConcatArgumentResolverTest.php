@@ -12,6 +12,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \Diezz\YamlToObjectMapper\Resolver\ConcatArgumentResolver
  * @covers \Diezz\YamlToObjectMapper\Mapper
+ * @covers \Diezz\YamlToObjectMapper\ClassInfo
  */
 class ConcatArgumentResolverTest extends TestCase
 {

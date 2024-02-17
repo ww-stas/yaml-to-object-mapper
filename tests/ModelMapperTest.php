@@ -9,6 +9,10 @@ use ReflectionException;
 
 /**
  * @covers \Diezz\YamlToObjectMapper\Mapper
+ * @covers \Diezz\YamlToObjectMapper\ClassInfo
+ * @covers \Diezz\YamlToObjectMapper\Resolver\InstanceArgumentResolver
+ * @covers \Diezz\YamlToObjectMapper\Resolver\ScalarArgumentResolver
+ * @covers \Diezz\YamlToObjectMapper\Resolver\SystemArgumentResolver
  */
 class ModelMapperTest extends TestCase
 {

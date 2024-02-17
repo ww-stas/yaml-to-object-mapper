@@ -9,6 +9,7 @@ use Diezz\YamlToObjectMapper\Tests\Examples\DatabaseSchema10;
 
 /**
  * @covers \Diezz\YamlToObjectMapper\Mapper
+ * @covers \Diezz\YamlToObjectMapper\Attributes\DefaultValueResolver
  */
 class DefaultValueResolverTest extends TestCase
 {

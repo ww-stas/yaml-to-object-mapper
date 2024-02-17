@@ -8,6 +8,14 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Diezz\YamlToObjectMapper\Resolver\Parser\Parser
+ * @covers \Diezz\YamlToObjectMapper\Resolver\Parser\AST\ASTNode
+ * @covers \Diezz\YamlToObjectMapper\Resolver\Parser\AST\ArrayExpression
+ * @covers \Diezz\YamlToObjectMapper\Resolver\Parser\AST\ResolverExpression
+ * @covers \Diezz\YamlToObjectMapper\Resolver\Parser\AST\StringLiteral
+ * @covers \Diezz\YamlToObjectMapper\Resolver\Parser\SpecItem
+ * @covers \Diezz\YamlToObjectMapper\Resolver\Parser\Tokenizer
+ * @covers \Diezz\YamlToObjectMapper\Resolver\Parser\Token
+ *
  */
 class ParserTest extends TestCase
 {

@@ -5,14 +5,15 @@ namespace Diezz\YamlToObjectMapper\Tests;
 use Diezz\YamlToObjectMapper\Mapper;
 use Diezz\YamlToObjectMapper\Resolver\ArgumentResolverException;
 use Diezz\YamlToObjectMapper\Resolver\CircularDependencyException;
-use PHPUnit\Framework\TestCase;
 use Diezz\YamlToObjectMapper\Tests\Examples\Self03;
 use Diezz\YamlToObjectMapper\Tests\Examples\Self04;
 use Diezz\YamlToObjectMapper\Tests\Examples\Self05;
 use Diezz\YamlToObjectMapper\Tests\Examples\Self12;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Diezz\YamlToObjectMapper\Resolver\SelfArgumentResolver
+ * @covers \Diezz\YamlToObjectMapper\Resolver\ArgumentResolver
  */
 class SelfArgumentMappingTest extends TestCase
 {
@@ -41,6 +42,9 @@ class SelfArgumentMappingTest extends TestCase
         self::assertEquals($secondPerson->name, $result->target);
     }
 
+    /**
+     * @covers \Diezz\YamlToObjectMapper\Resolver\ArgumentResolverException
+     */
     public function testSelfArgumentResolverOfNestedFieldShouldThrowAnException(): void
     {
         //Given
@@ -64,6 +68,9 @@ class SelfArgumentMappingTest extends TestCase
         self::assertEquals($result->date, $result->target);
     }
 
+    /**
+     * @covers \Diezz\YamlToObjectMapper\Resolver\CircularDependencyException
+     */
     public function testSelfArgumentResolverWithCircularReferences(): void
     {
         //Given
@@ -74,6 +81,9 @@ class SelfArgumentMappingTest extends TestCase
         Mapper::make()->mapFromFile(Self12::class, $file);
     }
 
+    /**
+     * @covers \Diezz\YamlToObjectMapper\Resolver\CircularDependencyException
+     */
     public function testSelfArgumentResolverWithCircularReferences2(): void
     {
         //Given
