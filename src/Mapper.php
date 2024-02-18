@@ -172,16 +172,7 @@ class Mapper
         if ($field->isPrimitive()) {
             $argResolver = $this->createArgumentResolverForPrimitive($rawValue);
         } else if ($field->isList()) {
-            $value = [];
-            if ($field->isTypedCollection()) {
-                foreach ($rawValue as $key => $item) {
-                    $value[] = new InstanceArgumentResolver($field->getClassInfo(), $this->getMappingConfig($field->getClassInfo(), $item, $key));
-                }
-            } else {
-                $value = $this->doMapArray($rawValue);
-            }
-
-            $argResolver = new ListArgumentResolver($value);
+            $argResolver = new ListArgumentResolver($this->doMapList($field, $rawValue));
         } else {
             $argResolver = new InstanceArgumentResolver($field->getClassInfo(), $this->getMappingConfig($field->getClassInfo(), $rawValue, $field->newInstance()));
         }
@@ -189,6 +180,27 @@ class Mapper
         return $argResolver;
     }
 
+    /**
+     * @param ClassField $field
+     * @param mixed      $rawValue
+     *
+     * @throws Resolver\ArgumentResolverException
+     * @throws Resolver\Parser\SyntaxException
+     * @return array
+     */
+    private function doMapList(ClassField $field, mixed $rawValue): array
+    {
+        $value = [];
+        if ($field->isTypedCollection() && $field->getClassInfo() !== null) {
+            foreach ($rawValue as $key => $item) {
+                $value[] = new InstanceArgumentResolver($field->getClassInfo(), $this->getMappingConfig($field->getClassInfo(), $item, $key));
+            }
+        } else {
+            $value = $this->doMapArray($rawValue);
+        }
+
+        return $value;
+    }
 
     /**
      * @param mixed $rawValue
@@ -199,12 +211,10 @@ class Mapper
     private function createArgumentResolverForPrimitive(mixed $rawValue): ArgumentResolver
     {
         if (is_bool($rawValue) || is_int($rawValue) || is_array($rawValue)) {
-            $argResolver = new ScalarArgumentResolver($rawValue);
-        } else {
-            $argResolver = $this->processExpression($rawValue);
+            return new ScalarArgumentResolver($rawValue);
         }
 
-        return $argResolver;
+        return $this->processExpression($rawValue);
     }
 
     /**
