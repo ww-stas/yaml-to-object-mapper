@@ -1,5 +1,6 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ww-stas/yaml-to-object-mapper/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/ww-stas/yaml-to-object-mapper/?branch=main)
 [![Build Status](https://scrutinizer-ci.com/g/ww-stas/yaml-to-object-mapper/badges/build.png?b=main)](https://scrutinizer-ci.com/g/ww-stas/yaml-to-object-mapper/build-status/main)
+[![Code Coverage](https://scrutinizer-ci.com/g/ww-stas/yaml-to-object-mapper/badges/coverage.png?b=main)](https://scrutinizer-ci.com/g/ww-stas/yaml-to-object-mapper/?branch=main)
 
 Yaml to Object Mapper
 =============================
