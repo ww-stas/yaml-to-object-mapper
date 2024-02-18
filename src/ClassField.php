@@ -3,6 +3,7 @@
 namespace Diezz\YamlToObjectMapper;
 
 use Diezz\YamlToObjectMapper\Attributes\Constructor;
+use ReflectionProperty;
 
 class ClassField
 {
@@ -42,14 +43,6 @@ class ClassField
     public function setIsTypedCollection(bool $isTypedCollection): void
     {
         $this->isTypedCollection = $isTypedCollection;
-    }
-
-    /**
-     * @param int $argumentResolverType
-     */
-    public function setArgumentResolverType(int $argumentResolverType): void
-    {
-        $this->argumentResolverType = $argumentResolverType;
     }
 
     /**

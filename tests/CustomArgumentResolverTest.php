@@ -12,6 +12,7 @@ use Diezz\YamlToObjectMapper\Tests\Examples\CustomArgumentResolver15;
 /**
  * @covers \Diezz\YamlToObjectMapper\Resolver\CustomArgumentResolver
  * @covers \Diezz\YamlToObjectMapper\Mapper
+ * @covers \Diezz\YamlToObjectMapper\Resolver\ArgumentResolverFactory
  */
 class CustomArgumentResolverTest extends TestCase
 {

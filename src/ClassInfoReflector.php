@@ -4,6 +4,7 @@ namespace Diezz\YamlToObjectMapper;
 
 use Diezz\YamlToObjectMapper\Attributes\Collection;
 use Diezz\YamlToObjectMapper\Attributes\DefaultValueResolver;
+use Diezz\YamlToObjectMapper\Attributes\HasNotDefaultValue;
 use Diezz\YamlToObjectMapper\Attributes\IgnoreUnknown;
 use Diezz\YamlToObjectMapper\Attributes\Required;
 use Diezz\YamlToObjectMapper\Attributes\Setter;
@@ -31,7 +32,7 @@ class ClassInfoReflector
 
             $classField->setName($propertyName);
             $classField->setRequired($this->isRequired($property));
-            $classField->setHasDefaultValue($property->hasDefaultValue());
+            $classField->setHasDefaultValue($this->resolveHasDefaultValue($property));
             $classField->setDefaultValueResolver($this->getDefaultValueResolver($property));
             $this->resolveType($property, $classField);
             $this->resolveSetter($reflection, $property, $classField);
@@ -108,6 +109,17 @@ class ClassInfoReflector
         }
 
         $classField->setSetter($possibleSetter);
+    }
+
+
+    private function resolveHasDefaultValue(ReflectionProperty $property): bool
+    {
+        $attributes = $property->getAttributes(HasNotDefaultValue::class);
+        if (empty($attributes)) {
+            return $property->hasDefaultValue();
+        }
+
+        return false;
     }
 
     /**

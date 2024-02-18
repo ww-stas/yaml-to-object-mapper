@@ -2,6 +2,7 @@
 
 namespace Diezz\YamlToObjectMapper\Tests\Examples;
 
+use Diezz\YamlToObjectMapper\Attributes\HasNotDefaultValue;
 use Diezz\YamlToObjectMapper\Attributes\Required;
 
 class RequiredModel
@@ -10,6 +11,7 @@ class RequiredModel
      * Required field
      */
     #[Required]
+    #[HasNotDefaultValue]
     public $value0;
 
     /**
@@ -22,6 +24,7 @@ class RequiredModel
      *
      * @var string
      */
+    #[HasNotDefaultValue]
     public $value2;
 
     /**
