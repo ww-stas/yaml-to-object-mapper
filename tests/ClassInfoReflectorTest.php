@@ -17,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \Diezz\YamlToObjectMapper\ClassInfo
  * @covers \Diezz\YamlToObjectMapper\ClassField
+ * @covers \Diezz\YamlToObjectMapper\ClassInfoReflector
  */
 class ClassInfoReflectorTest extends TestCase
 {
